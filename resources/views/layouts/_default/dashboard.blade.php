@@ -7,10 +7,14 @@
 
 <body>
     @include('layouts.partials.navbar')
-    @include('layouts.partials.sidebar')
-    <main class="pt-4 pb-4 content pt-lg-xl">
-        @yield('content')
-    </main>
+    <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+        @include('layouts.partials.sidebar')
+        <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
+            <main>
+                @yield('content')
+            </main>
+        </div>
+    </div>
 </body>
 
 </html>
