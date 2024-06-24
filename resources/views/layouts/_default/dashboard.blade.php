@@ -3,7 +3,6 @@
 
 <head>
     @include('layouts.partials.header')
-
 </head>
 
 <body>
