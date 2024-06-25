@@ -55,15 +55,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
                 <button id="createProductButton"
-                    class="text-white bg-primary-700 mr-3 hover:bg-primary-800 focus:ring-4 bg-blue-500 focus:ring-primary-300 font-medium inset-y-0 right-0 rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                    class="text-white bg-primary-700 ml-2 hover:bg-primary-800 focus:ring-4 bg-blue-500 focus:ring-primary-300 font-medium inset-y-0 right-0 rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                     type="button" data-drawer-target="drawer-create-product-default"
                     data-drawer-show="drawer-create-product-default" aria-controls="drawer-create-product-default"
                     data-drawer-placement="right">
                     Upload file
                 </button>
+            </div>
+            <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
             </div>
         </div>
         <div class="flex items-center justify-center h-48 bg-gray-50 dark:bg-gray-800 min-h-screen">
