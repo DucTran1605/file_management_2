@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/deleteSoftFile/{id}', [FileDeleteController::class, 'deleteSoftFile'])->name('file.delete');
     Route::get('/file/trash', [FileListController::class, 'showTrashedFile'])->name('file.trashed');
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
+    Route::delete('/files/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
