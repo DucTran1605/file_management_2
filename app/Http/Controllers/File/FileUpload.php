@@ -23,11 +23,12 @@ class FileUpload extends Controller
         $uploadedFile->storeAs('public/' . $uploadedFile->getClientOriginalName());
 
         // Optionally, additional details can be saved to the database
-        $file = File::create([
+        File::create([
             'name' => $uploadedFile->getClientOriginalName(),
             'path' => Str::random(40),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
+            'extension' => $uploadedFile->getClientOriginalExtension(),
             'user_id' => auth()->id(),
         ]);
 

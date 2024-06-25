@@ -8,9 +8,10 @@ use App\Http\Controllers\Controller;
 
 class FileList extends Controller
 {
-    public function listAllFile(){
-            $files = File::where('user_id', '=', auth()->id())->get();
+    public function listAllFile()
+    {
+        $files = File::where('user_id', '=', auth()->id())->get();
 
-            return view('layouts.home.main_page', compact('files'));
+        return view('layouts.home.main_page', compact('files'));
     }
 }

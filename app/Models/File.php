@@ -14,6 +14,7 @@ class File extends Model
         'path',
         'size',
         'type',
+        'extension',
         'user_id',
         'parent_id',
     ];
