@@ -21,4 +21,17 @@ class FileDeleteController extends Controller
 
         return redirect()->back()->with('message', 'Move file to the trash');
     }
+
+    /**
+     * Restore file from trash
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function restoreFile($id)
+    {
+        $file = File::onlyTrashed()->findOrFail($id);
+        $file->restore();
+        return redirect()->back()->with('message', 'Restore file success');
+    }
 }
