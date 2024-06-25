@@ -5,11 +5,11 @@ use App\Http\Controllers\File\FileUpload;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/welcome', function () {
-    return view('layouts._default.dashboard');
+Route::get('/', function () {
+    return view('auth.login');
 });
 
-Route::get('/', function () {
+Route::get('/dashboard', function () {
     return view('layouts.home.main_page');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
