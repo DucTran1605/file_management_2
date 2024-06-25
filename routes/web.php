@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\File\FileDeleteController;
 use App\Http\Controllers\File\FileList;
 use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileUpload;
@@ -23,6 +24,8 @@ Route::middleware('auth')->group(function () {
     //Route for File
     Route::post('/fileUpload', [FileUploadController::class, 'uploadFile'])->name('file.upload');
     Route::get('/showAllFile', [FileListController::class, 'listAllFile'])->name('file.show');
+    Route::delete('/deleteSoftFile/{id}', [FileDeleteController::class, 'deleteSoftFile'])->name('file.delete');
+    Route::get('/file/trash', [FileListController::class, 'showTrashedFile'])->name('file.trashed');
 });
 
 require __DIR__.'/auth.php';
