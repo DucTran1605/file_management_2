@@ -55,13 +55,41 @@
                         </div>
                     </div>
                 </div>
-                <button id="createProductButton"
-                    class="text-white bg-primary-700 ml-2 hover:bg-primary-800 focus:ring-4 bg-blue-500 focus:ring-primary-300 font-medium inset-y-0 right-0 rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-                    type="button" data-drawer-target="drawer-create-product-default"
-                    data-drawer-show="drawer-create-product-default" aria-controls="drawer-create-product-default"
-                    data-drawer-placement="right">
-                    Upload file
-                </button>
+                <!-- Trigger Button -->
+                <div class="flex justify-center items-center min-h-screen">
+                    <button id="openModalBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md">Upload File</button>
+                </div>
+                <!-- Modal Background (Hidden by Default) -->
+                <div id="modalBackdrop"
+                    class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
+                    <!-- Modal Content -->
+                    <div class="bg-white rounded-lg overflow-hidden shadow-lg max-w-md w-full dark:bg-gray-800">
+                        <div class="p-4 border-b dark:border-gray-700">
+                            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Upload File</h2>
+                        </div>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="dropzone-file"
+                                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                            class="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
+                                        800x400px)</p>
+                                </div>
+                                <input id="dropzone-file" type="file" class="hidden" />
+                            </label>
+                        </div>
+                        <div class="p-4 border-t flex justify-end dark:border-gray-700">
+                            <button id="closeModalBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
             </div>
