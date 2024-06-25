@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\File\FileList;
 use App\Http\Controllers\File\FileUpload;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ Route::middleware('auth')->group(function () {
 
     //Route for File
     Route::post('/fileUpload', [FileUpload::class, 'uploadFile'])->name('file.upload');
+    Route::get('/showAllFile', [FileList::class, 'listAllFile'])->name('file.show');
 });
 
 require __DIR__.'/auth.php';

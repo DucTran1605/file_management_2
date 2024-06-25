@@ -98,7 +98,7 @@
                                 Size
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Upload date
+                                Uploaded
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Action
@@ -106,22 +106,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">
-                                Silver
-                            </td>
-                            <td class="px-6 py-4">
-                                Laptop
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
+                        @foreach ($files as $file)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $file->name }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $file->size }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $file->created_at->diffForHumans() }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="#"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
