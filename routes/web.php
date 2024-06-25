@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\File\FileDeleteController;
-use App\Http\Controllers\File\FileList;
+use App\Http\Controllers\File\FileDownloadController;
 use App\Http\Controllers\File\FileListController;
-use App\Http\Controllers\File\FileUpload;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/file/trash', [FileListController::class, 'showTrashedFile'])->name('file.trashed');
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
     Route::delete('/files/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
+    Route::get('/fileDownload/{id}', [FileDownloadController::class, 'downloadFile'])->name('file.donwload');
 });
 
 require __DIR__ . '/auth.php';
