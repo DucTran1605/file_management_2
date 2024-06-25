@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\File\FileList;
+use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileUpload;
+use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Route for File
-    Route::post('/fileUpload', [FileUpload::class, 'uploadFile'])->name('file.upload');
-    Route::get('/showAllFile', [FileList::class, 'listAllFile'])->name('file.show');
+    Route::post('/fileUpload', [FileUploadController::class, 'uploadFile'])->name('file.upload');
+    Route::get('/showAllFile', [FileListController::class, 'listAllFile'])->name('file.show');
 });
 
 require __DIR__.'/auth.php';

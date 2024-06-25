@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class FileUpload extends Controller
+class FileUploadController extends Controller
 {
     /**
      * Function to upload file into server
