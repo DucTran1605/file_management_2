@@ -146,28 +146,103 @@
                                     {{ $file->created_at->diffForHumans() }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <form action="{{ route('file.delete', $file->id) }}" method="POST">
-                                        @csrf
-                                        @method('Delete')
-                                        <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                fill="currentColor" viewBox="0 0 24 24">
-                                                <path fill-rule="evenodd"
-                                                    d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </form>
-                                    <a href="{{ route('file.donwload', $file->id) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z"
-                                                clip-rule="evenodd" />
-                                            <path fill-rule="evenodd"
-                                                d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </a>
+                                    <!-- Settings Dropdown -->
+                                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                                        <x-dropdown align="right" width="48">
+                                            <x-slot name="trigger">
+                                                <button>
+                                                    <div class="ms-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-width="3" d="M12 6h.01M12 12h.01M12 18h.01" />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                            </x-slot>
+
+                                            <x-slot name="content">
+                                                <!-- Delete File -->
+                                                <form method="POST" action="{{ route('file.delete', $file->id) }}">
+                                                    @csrf
+                                                    @method('Delete')
+                                                    <x-dropdown-link :href="route('file.delete', $file->id)"
+                                                        onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                                        {{ __('Delete') }}
+                                                    </x-dropdown-link>
+                                                </form>
+
+                                                <x-dropdown-link>
+                                                    <!-- Show File Detail -->
+                                                    <button data-name="{{ $file->name }}"
+                                                        data-size="{{ number_format($file->size / 1024) }}"
+                                                        data-date="{{ $file->created_at->format('d-m-Y') }}"
+                                                        onclick="openModal(this)">
+                                                        {{ __('File Detail') }}
+                                                    </button>
+                                                </x-dropdown-link>
+                                            </x-slot>
+                                        </x-dropdown>
+                                    </div>
+                                    <!-- Main modal -->
+                                    <div id="authentication-modal" tabindex="-1" aria-hidden="true"
+                                        class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
+                                        <div class="relative p-4 w-full max-w-md max-h-full">
+                                            <!-- Modal content -->
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <!-- Modal header -->
+                                                <div
+                                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                        Document Details
+                                                    </h3>
+                                                    <button type="button"
+                                                        class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                        onclick="closeModal()">
+                                                        <svg class="w-3 h-3" aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
+                                                </div>
+                                                <!-- Modal body -->
+                                                <div class="p-4 md:p-5">
+                                                    <form class="space-y-4" action="#">
+                                                        <div>
+                                                            <label for="file-name"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
+                                                                Name</label>
+                                                            <input type="text" id="file-name"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+                                                        </div>
+                                                        <div>
+                                                            <label for="file-size"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
+                                                                Size (KB)</label>
+                                                            <input type="text" id="file-size"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                                readonly />
+                                                        </div>
+                                                        <div>
+                                                            <label for="file-date"
+                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload
+                                                                Date</label>
+                                                            <input type="text" id="file-date"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                                readonly />
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -176,4 +251,23 @@
             </div>
         </div>
     </div>
+    <script>
+        const modal = document.getElementById('authentication-modal');
+
+        function openModal(element) {
+            const fileName = element.getAttribute('data-name');
+            const fileSize = element.getAttribute('data-size');
+            const fileDate = element.getAttribute('data-date');
+
+            document.getElementById('file-name').value = fileName;
+            document.getElementById('file-size').value = fileSize;
+            document.getElementById('file-date').value = fileDate;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+    </script>
 @endsection

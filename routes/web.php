@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\File\FileDeleteController;
+use App\Http\Controllers\File\FileDetailController;
 use App\Http\Controllers\File\FileDownloadController;
 use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileUploadController;
@@ -11,9 +12,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('layouts.home.main_page');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/test', function () {
+    return view('layouts.home.test');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/file/trash', [FileListController::class, 'showTrashedFile'])->name('file.trashed');
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
     Route::delete('/files/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
-    Route::get('/fileDownload/{id}', [FileDownloadController::class, 'downloadFile'])->name('file.donwload');
+    Route::get('/fileDetail/{id}', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
 });
 
 require __DIR__ . '/auth.php';
