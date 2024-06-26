@@ -20,7 +20,7 @@ class FileUploadController extends Controller
     {
         // Handle the validated file upload
         $uploadedFile = $request->file('file');
-        $uploadedFile->storeAs('public/' . $uploadedFile->getClientOriginalName());
+        $uploadedFile->storeAs($uploadedFile->getClientOriginalName());
 
         // Optionally, additional details can be saved to the database
         File::create([
@@ -28,7 +28,6 @@ class FileUploadController extends Controller
             'path' => Str::random(40),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
-            'extension' => $uploadedFile->getClientOriginalExtension(),
             'user_id' => auth()->id(),
         ]);
 
