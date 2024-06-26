@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
     Route::delete('/files/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
     Route::get('/fileDetail/{id}', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
+    Route::put('/fileEdit/{id}', [FileDetailController::class, 'changeFileName'])->name('file.edit');
 });
 
 require __DIR__ . '/auth.php';

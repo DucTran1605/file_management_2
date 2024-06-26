@@ -101,7 +101,7 @@
                                 Uploaded
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Action
+                                <span class="ml-4">Action</span>
                             </th>
                         </tr>
                     </thead>
@@ -113,7 +113,7 @@
                                     @php
                                         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
                                         $textExtensions = ['txt', 'md', 'csv', 'log', 'json', 'xml', 'html'];
-                                        $fileExtension = strtolower(pathinfo($file->name, PATHINFO_EXTENSION));
+                                        $fileExtension = $file->extension;
                                     @endphp
                                     @if (in_array($fileExtension, $imageExtensions))
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -137,7 +137,7 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     @endif
-                                    {{ $file->name }}
+                                    {{ $file->name }}.{{ $file->extension }}
                                 </th>
                                 <td class="px-6 py-4">
                                     {{ number_format($file->size / 1024) }} KB
@@ -173,76 +173,48 @@
                                                     </x-dropdown-link>
                                                 </form>
 
-                                                <x-dropdown-link>
-                                                    <!-- Show File Detail -->
-                                                    <button data-name="{{ $file->name }}"
-                                                        data-size="{{ number_format($file->size / 1024) }}"
-                                                        data-date="{{ $file->created_at->format('d-m-Y') }}"
-                                                        onclick="openModal(this)">
-                                                        {{ __('File Detail') }}
-                                                    </button>
+                                                <x-dropdown-link x-data=""
+                                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('File Detail') }}
                                                 </x-dropdown-link>
                                             </x-slot>
                                         </x-dropdown>
                                     </div>
                                     <!-- Main modal -->
-                                    <div id="authentication-modal" tabindex="-1" aria-hidden="true"
-                                        class="hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
-                                        <div class="relative p-4 w-full max-w-md max-h-full">
-                                            <!-- Modal content -->
-                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                                <!-- Modal header -->
-                                                <div
-                                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                                        Document Details
-                                                    </h3>
-                                                    <button type="button"
-                                                        class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                        onclick="closeModal()">
-                                                        <svg class="w-3 h-3" aria-hidden="true"
-                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 14 14">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                        </svg>
-                                                        <span class="sr-only">Close modal</span>
-                                                    </button>
-                                                </div>
-                                                <!-- Modal body -->
-                                                <div class="p-4 md:p-5">
-                                                    <form class="space-y-4" action="#">
-                                                        <div>
-                                                            <label for="file-name"
-                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
-                                                                Name</label>
-                                                            <input type="text" id="file-name"
-                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
-                                                        </div>
-                                                        <div>
-                                                            <label for="file-size"
-                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
-                                                                Size (KB)</label>
-                                                            <input type="text" id="file-size"
-                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                                                readonly />
-                                                        </div>
-                                                        <div>
-                                                            <label for="file-date"
-                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload
-                                                                Date</label>
-                                                            <input type="text" id="file-date"
-                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                                                readonly />
-                                                        </div>
-                                                        <button type="submit"
-                                                            class="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-                                                    </form>
-                                                </div>
+                                    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+                                            @csrf
+                                            @method('delete')
+
+                                            <h2 class="text-lg font-medium text-gray-900">
+                                                {{ __('Are you sure you want to delete your account?') }}
+                                            </h2>
+
+                                            <p class="mt-1 text-sm text-gray-600">
+                                                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                                            </p>
+
+                                            <div class="mt-6">
+                                                <x-input-label for="password" value="{{ __('Password') }}"
+                                                    class="sr-only" />
+
+                                                <x-text-input id="password" name="password" type="password"
+                                                    class="mt-1 block w-3/4 read-only:"
+                                                    placeholder="{{ __('Password') }}" />
+
+                                                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
                                             </div>
-                                        </div>
-                                    </div>
+
+                                            <div class="mt-6 flex justify-end">
+                                                <x-secondary-button x-on:click="$dispatch('close')">
+                                                    {{ __('Cancel') }}
+                                                </x-secondary-button>
+
+                                                <x-danger-button class="ms-3">
+                                                    {{ __('Delete Account') }}
+                                                </x-danger-button>
+                                            </div>
+                                        </form>
+                                    </x-modal>
                                 </td>
                             </tr>
                         @endforeach
@@ -258,6 +230,13 @@
             const fileName = element.getAttribute('data-name');
             const fileSize = element.getAttribute('data-size');
             const fileDate = element.getAttribute('data-date');
+            const fileType = element.getAttribute('data-type');
+
+            if (fileType === null) {
+                document.getElementById('file-type').value = 'folder';
+            } else {
+                document.getElementById('file-type').value = fileType;
+            }
 
             document.getElementById('file-name').value = fileName;
             document.getElementById('file-size').value = fileSize;

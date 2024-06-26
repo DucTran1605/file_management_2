@@ -24,11 +24,12 @@ class FileUploadController extends Controller
 
         // Optionally, additional details can be saved to the database
         File::create([
-            'name' => $uploadedFile->getClientOriginalName(),
+            'name' => basename($request->file('file')->getClientOriginalName(), '.'.$request->file('file')->getClientOriginalExtension()),
             'path' => Str::random(40),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
             'user_id' => auth()->id(),
+            'extension' => $uploadedFile->getClientOriginalExtension(),
         ]);
 
         return redirect()->back()->with('message', 'File upload success');

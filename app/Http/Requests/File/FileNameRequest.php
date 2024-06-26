@@ -4,7 +4,7 @@ namespace App\Http\Requests\File;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FileUploadRequest extends FormRequest
+class FileNameRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,21 +22,7 @@ class FileUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|max:30720',
-        ];
-    }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'file.required' => 'A file is required.',
-            'file.file' => 'The uploaded item must be a file.',
-            'file.max' => 'The file may not be greater than 30MB.',
+            'file_name' => 'required|string|max:255'
         ];
     }
 }
