@@ -32,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/file/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
     Route::get('/fileDetail/{id}', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
     Route::put('/fileEdit/{id}', [FileDetailController::class, 'changeFileName'])->name('file.edit');
+
+    //Route for Folder
+    Route::post('/folderCreate', [FileUploadController::class, 'createFolder'])->name('folder.create');
 });
 
 require __DIR__ . '/auth.php';
