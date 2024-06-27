@@ -6,6 +6,7 @@ use App\Http\Controllers\File\FileDownloadController;
 use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
+use App\Models\File;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,7 +14,8 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    return view('layouts.home.test');
+    $files = File::all();
+    return view('layouts.test', compact('files'));
 });
 
 Route::middleware('auth')->group(function () {

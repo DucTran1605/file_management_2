@@ -14,15 +14,15 @@ class FileDetailController extends Controller
     {
         $fileDetail = File::findOrFail($id);
 
-        return view('layouts.home.main_page', compact('fileDetail'));
+        return view('layouts.partials.modal', compact('fileDetail'));
     }
 
     public function changeFileName(FileNameRequest $request, $id)
     {
-        $change = DB::table('files')->where('id', $id)
-            ->update(
-                ['name' => $request->file_name]
-            );
-        dd($change);
+        $fileDetail = File::findOrFail($id);
+
+        $fileDetail->update($request->only('name'));
+
+        return back();
     }
 }
