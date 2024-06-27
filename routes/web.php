@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/deleteSoftFile/{id}', [FileDeleteController::class, 'deleteSoftFile'])->name('file.delete');
     Route::get('/file/trash', [FileListController::class, 'showTrashedFile'])->name('file.trashed');
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
-    Route::delete('/files/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
+    Route::delete('/file/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
     Route::get('/fileDetail/{id}', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
     Route::put('/fileEdit/{id}', [FileDetailController::class, 'changeFileName'])->name('file.edit');
 });

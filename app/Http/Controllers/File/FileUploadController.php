@@ -34,4 +34,6 @@ class FileUploadController extends Controller
 
         return redirect()->back()->with('message', 'File upload success');
     }
+
+    
 }

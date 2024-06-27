@@ -55,33 +55,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Trigger Button -->
-                <div class="flex justify-center items-center min-h-screen">
-                    <button id="openModalBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md">Upload File</button>
-                </div>
-                <!-- Modal Background (Hidden by Default) -->
-                <div id="modalBackdrop"
-                    class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
-                    <!-- Modal Content -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg max-w-md w-full dark:bg-gray-800">
-                        <div class="p-4 border-b dark:border-gray-700">
-                            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Upload File</h2>
-                        </div>
-                        <form action="{{ route('file.upload') }}" method="post" enctype="multipart/form-data"
-                            id="image-upload" class="dropzone">
-                            @csrf
-                            <div class="flex items-center justify-center w-full">
-                                <input
-                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                    id="file_input" name="file" type="file">
-                                <button type="submit">Submit</button>
-                            </div>
-                        </form>
-                        <div class="p-4 border-t flex justify-end dark:border-gray-700">
-                            <button id="closeModalBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Close</button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
             </div>
@@ -101,7 +74,7 @@
                                 Uploaded
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Action
+                                <span class="ml-4">Action</span>
                             </th>
                         </tr>
                     </thead>
@@ -113,7 +86,7 @@
                                     @php
                                         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
                                         $textExtensions = ['txt', 'md', 'csv', 'log', 'json', 'xml', 'html'];
-                                        $fileExtension = strtolower(pathinfo($file->name, PATHINFO_EXTENSION));
+                                        $fileExtension = $file->extension;
                                     @endphp
                                     @if (in_array($fileExtension, $imageExtensions))
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -130,8 +103,8 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     @else
-                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" fill="currentColor" viewBox="0 0 24 24">
+                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
                                             <path fill-rule="evenodd"
                                                 d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
                                                 clip-rule="evenodd" />
@@ -146,27 +119,45 @@
                                     {{ $file->created_at->diffForHumans() }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <form action="{{ route('file.forceDelete', $file->id) }}" method="POST">
-                                        @csrf
-                                        @method('Delete')
-                                        <button onclick="return confirm('This file cannot restore after delete?')"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                fill="currentColor" viewBox="0 0 24 24">
-                                                <path fill-rule="evenodd"
-                                                    d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('files.restore', $file->id) }}" method="GET">
-                                        <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                fill="currentColor" viewBox="0 0 24 24">
-                                                <path fill-rule="evenodd"
-                                                    d="M5 4a2 2 0 0 0-2 2v1h10.968l-1.9-2.28A2 2 0 0 0 10.532 4H5ZM3 19V9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm11.707-7.707a1 1 0 0 0-1.414 1.414l.293.293H8a1 1 0 1 0 0 2h5.586l-.293.293a1 1 0 0 0 1.414 1.414l2-2a1 1 0 0 0 0-1.414l-2-2Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    <!-- Settings Dropdown -->
+                                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                                        <x-dropdown align="right" width="48">
+                                            <x-slot name="trigger">
+                                                <button>
+                                                    <div class="ms-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-width="3" d="M12 6h.01M12 12h.01M12 18h.01" />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                            </x-slot>
+
+                                            <x-slot name="content">
+                                                <!-- Delete File -->
+                                                <form method="POST" action="{{ route('file.forceDelete', $file->id) }}">
+                                                    @csrf
+                                                    @method('Delete')
+                                                    <x-dropdown-link
+                                                        onclick="return confirm('This file cannot restore after delete?')"
+                                                        :href="route('file.forceDelete', $file->id)"
+                                                        onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                                        {{ __('Delete') }}
+                                                    </x-dropdown-link>
+                                                </form>
+
+                                                <form action="{{ route('files.restore', $file->id) }}">
+                                                    <x-dropdown-link :href="route('files.restore', $file->id)"
+                                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                                        {{ __('Restore File') }}
+                                                    </x-dropdown-link>
+                                                </form>
+                                            </x-slot>
+                                        </x-dropdown>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
