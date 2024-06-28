@@ -2,7 +2,7 @@
     <!-- Modal content -->
     <div x-data="{
         file: {
-            id: null, name: '', size: 0, type: ''
+            id: null, name: '', size: 0, type: '', created_at: ''
         },
         updateUrl() {
             return `/fileEdit/${this.file.id}`;
@@ -50,6 +50,14 @@
                     </label>
                     <input name="type"
                     x-model="file.type"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        readonly placeholder="" />
+                </div>
+                <div>
+                    <label for="fileType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload date
+                    </label>
+                    <input name="date"
+                    x-model="file.created_at"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         readonly placeholder="" />
                 </div>

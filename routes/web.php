@@ -13,11 +13,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/test', function () {
-    $files = File::all();
-    return view('layouts.test', compact('files'));
-});
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -35,6 +30,11 @@ Route::middleware('auth')->group(function () {
 
     //Route for Folder
     Route::post('/folderCreate', [FileUploadController::class, 'createFolder'])->name('folder.create');
+    Route::get('/folder/{id}', [FileListController::class, 'listSpecificFolder'])->name('folder.show');
 });
 
 require __DIR__ . '/auth.php';
+
+Route::get('/test', function () {
+    return view('layouts.test');
+})->name('test');

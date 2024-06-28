@@ -20,6 +20,15 @@ class FileListController extends Controller
     }
 
 
+    public function listSpecificFolder($id)
+    {
+        $files = File::where([
+            ['user_id', '=', auth()->id()],
+            ['parent_id', '=', $id]
+        ])->get();
+        return view('layouts.home.main_page', compact('files'));
+    }
+
     /**
      * Show all file that put into trash
      *
