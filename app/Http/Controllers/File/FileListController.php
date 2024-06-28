@@ -15,7 +15,10 @@ class FileListController extends Controller
      */
     public function listAllFile()
     {
-        $files = File::where('user_id', '=', auth()->id())->get();
+        $files = File::where([
+            ['user_id', '=', auth()->id()],
+            ['parent_id', '=', null]
+        ])->get();
         return view('layouts.home.main_page', compact('files'));
     }
 
