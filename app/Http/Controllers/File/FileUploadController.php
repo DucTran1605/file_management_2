@@ -16,7 +16,7 @@ class FileUploadController extends Controller
      * @param Request $request
      * @return void
      */
-    public function uploadFile(FileUploadRequest $request)
+    public function uploadFile(FileUploadRequest $request, $folder_id = null)
     {
         // Handle the validated file upload
         $uploadedFile = $request->file('file');
@@ -28,6 +28,7 @@ class FileUploadController extends Controller
             'path' => Str::random(40),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
+            'parent_id' => $folder_id,
             'user_id' => auth()->id(),
             'extension' => $uploadedFile->getClientOriginalExtension(),
         ]);

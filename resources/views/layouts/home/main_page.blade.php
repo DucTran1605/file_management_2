@@ -34,8 +34,8 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <form action="{{ route('file.upload') }}" method="POST" enctype="multipart/form-data"
-                                id="image-upload">
+                            <form action="{{ route('file.upload', ['parent_id' => $folder_id ?? '']) }}" method="POST"
+                                enctype="multipart/form-data" id="image-upload">
                                 @csrf
                                 <button
                                     class="btn block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"

@@ -22,11 +22,12 @@ class FileListController extends Controller
 
     public function listSpecificFolder($id)
     {
+        $folder_id = File::findOrFail($id);
         $files = File::where([
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', $id]
         ])->get();
-        return view('layouts.home.main_page', compact('files'));
+        return view('layouts.home.main_page', compact('files', 'folder_id'));
     }
 
     /**
