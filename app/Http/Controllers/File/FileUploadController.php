@@ -16,7 +16,7 @@ class FileUploadController extends Controller
      * @param Request $request
      * @return void
      */
-    public function uploadFile(FileUploadRequest $request)
+    public function uploadFile(FileUploadRequest $request, $folder_id = null)
     {
         // Handle the validated file upload
         $uploadedFile = $request->file('file');
@@ -24,13 +24,29 @@ class FileUploadController extends Controller
 
         // Optionally, additional details can be saved to the database
         File::create([
-            'name' => $uploadedFile->getClientOriginalName(),
+            'name' => basename($request->file('file')->getClientOriginalName(), '.' . $request->file('file')->getClientOriginalExtension()),
             'path' => Str::random(40),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
+            'parent_id' => $folder_id,
             'user_id' => auth()->id(),
+            'extension' => $uploadedFile->getClientOriginalExtension(),
         ]);
 
         return redirect()->back()->with('message', 'File upload success');
+    }
+
+    public function createFolder(Request $request)
+    {
+        File::create([
+            'name' => $request->folder_name,
+            'path' => Str::random(40),
+            'size' => "",
+            'type' => 'folder',
+            'user_id' => auth()->id(),
+            'extension' => "",
+        ]);
+
+        return redirect()->back()->with('message', 'Folder create success');
     }
 }
