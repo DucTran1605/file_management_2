@@ -70,8 +70,8 @@
                                 <div class="p-4 border-t flex justify-end dark:border-gray-700">
                                     <button type="submit"
                                         class="px-4 py-2 bg-green-600 text-white rounded-md mr-2">Submit</button>
-                                    <button id="closeModalBtn"
-                                        class="px-4 py-2 bg-red-600 text-white rounded-md">Close</button>
+                                    <button id="closeModalBtn" class="px-4 py-2 bg-red-600 text-white rounded-md"
+                                        type="button">Close</button>
                                 </div>
                             </form>
                         </div>
