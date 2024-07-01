@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/file/{id}/update', [FileDetailController::class, 'changeFileName'])->name('file.edit');
 
     //Route for Folder
-    Route::post('/folderCreate', [FileUploadController::class, 'createFolder'])->name('folder.create');
+    Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');
     Route::get('/folder/{id}', [FileListController::class, 'listSpecificFolder'])->name('folder.show');
 });
 
