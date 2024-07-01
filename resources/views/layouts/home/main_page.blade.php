@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 @if (session()->has('cuted_file_id'))
-                    <form action="{{ route('file.paste') }}" method="POST">
+                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}" method="POST">
                         @csrf
                         <input type="hidden" value="null" name="parent_id">
                         <td><button
