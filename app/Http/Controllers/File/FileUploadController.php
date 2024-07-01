@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\File;
 
-use App\Http\Requests\File\FileUploadRequest;
 use App\Models\File;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\File\FileUploadRequest;
 
 class FileUploadController extends Controller
 {
@@ -22,22 +23,28 @@ class FileUploadController extends Controller
         $uploadedFile = $request->file('file');
         $originalName = $uploadedFile->getClientOriginalName();
 
-        // Check if the file name already exists and generate a unique name
-        $filename = $this->generateUniqueFileName($originalName, $folder_id);
+        //Check if user is in the root or in a folder
+        if ($folder_id == null) {
+            $filePath = null;
+        } else {
+            $filePath = File::findOrFail($folder_id)->name;
+        }
 
-        // Store the file with the unique filename
-        $uploadedFile->storeAs('', $filename); // Assuming you want to store in the root directory; adjust as necessary
+        // Check if the file name already exists and generate a unique name
+        $filename = $this->generateUniqueFileName($originalName, $filePath);
 
         // Optionally, additional details can be saved to the database
         File::create([
             'name' => $filename,
-            'path' => Str::random(40),
+            'path' => Str::random(10),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
             'parent_id' => $folder_id,
             'user_id' => auth()->id(),
             'extension' => $uploadedFile->getClientOriginalExtension(),
         ]);
+
+        Storage::disk('s3')->putFileAs($filePath, $uploadedFile, $filename);
 
         return redirect()->back()->with('message', 'File upload success');
     }
@@ -46,7 +53,7 @@ class FileUploadController extends Controller
     {
         File::create([
             'name' => $request->folder_name,
-            'path' => Str::random(40),
+            'path' => Str::random(10),
             'size' => "",
             'type' => 'folder',
             'parent_id' => $folder_id,
@@ -57,14 +64,21 @@ class FileUploadController extends Controller
         return redirect()->back()->with('message', 'Folder create success');
     }
 
-    private function generateUniqueFileName($originalName, $folder_id)
+    /**
+     * Create a unique name for file
+     *
+     * @param [type] $originalName
+     * @param [type] $folder_id
+     * @return void
+     */
+    private function generateUniqueFileName($originalName, $filePath)
     {
         $name = pathinfo($originalName, PATHINFO_FILENAME);
         $extension = pathinfo($originalName, PATHINFO_EXTENSION);
         $counter = 1;
         $newName = $originalName;
 
-        while (File::where('name', $newName)->where('parent_id', $folder_id)->exists()) {
+        while (Storage::disk('s3')->exists("{$filePath}/{$newName}")) {
             $newName = $name . '_' . $counter . '.' . $extension;
             $counter++;
         }
