@@ -14,7 +14,7 @@
                             </div>
                         </form>
                         <div class="flex items-center w-full sm:justify-end">
-                            <div class="flex pl-2 space-x-1">
+                            {{-- <div class="flex pl-2 space-x-1">
                                 <a href="#"
                                     class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -51,7 +51,7 @@
                                         </path>
                                     </svg>
                                 </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                                                     @csrf
                                                     @method('Delete')
                                                     <x-dropdown-link :href="route('file.forceDelete', $file->id)"
-                                                        onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this file?')) { this.closest('form').submit(); }">
+                                                        onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this file? \n File after delete cannot restore')) { this.closest('form').submit(); }">
                                                         {{ __('Delete') }}
                                                     </x-dropdown-link>
                                                 </form>
