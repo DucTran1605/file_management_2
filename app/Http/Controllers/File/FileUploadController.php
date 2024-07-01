@@ -20,11 +20,17 @@ class FileUploadController extends Controller
     {
         // Handle the validated file upload
         $uploadedFile = $request->file('file');
-        $uploadedFile->storeAs($uploadedFile->getClientOriginalName());
+        $originalName = $uploadedFile->getClientOriginalName();
+
+        // Check if the file name already exists and generate a unique name
+        $filename = $this->generateUniqueFileName($originalName, $folder_id);
+
+        // Store the file with the unique filename
+        $uploadedFile->storeAs('', $filename); // Assuming you want to store in the root directory; adjust as necessary
 
         // Optionally, additional details can be saved to the database
         File::create([
-            'name' => $request->file('file')->getClientOriginalName(),
+            'name' => $filename,
             'path' => Str::random(40),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
@@ -49,5 +55,20 @@ class FileUploadController extends Controller
         ]);
 
         return redirect()->back()->with('message', 'Folder create success');
+    }
+
+    private function generateUniqueFileName($originalName, $folder_id)
+    {
+        $name = pathinfo($originalName, PATHINFO_FILENAME);
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        $counter = 1;
+        $newName = $originalName;
+
+        while (File::where('name', $newName)->where('parent_id', $folder_id)->exists()) {
+            $newName = $name . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+
+        return $newName;
     }
 }
