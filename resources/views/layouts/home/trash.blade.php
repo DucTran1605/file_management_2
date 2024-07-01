@@ -7,14 +7,14 @@
                     <div class="flex items-center mb-4 sm:mb-0">
                         <form class="sm:pr-3" action="#" method="GET">
                             <label for="products-search" class="sr-only">Search</label>
-                            <div class="relative w-48 mt-1 sm:w-64 xl:w-96">
+                            <div class="relative w-48 sm:w-64 xl:w-96">
                                 <input type="text" name="email" id="products-search"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="Search in drive">
                             </div>
                         </form>
                         <div class="flex items-center w-full sm:justify-end">
-                            <div class="flex pl-2 space-x-1">
+                            {{-- <div class="flex pl-2 space-x-1">
                                 <a href="#"
                                     class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
@@ -51,7 +51,7 @@
                                         </path>
                                     </svg>
                                 </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,11 @@
                                     {{ $file->name }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{ number_format($file->size / 1024) }} KB
+                                    @if ($file->size == '')
+                                        <label for="" class="ml-2">-</label>
+                                    @else
+                                        {{ number_format($file->size / 1024) }} KB
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $file->created_at->diffForHumans() }}
@@ -139,11 +143,8 @@
                                                 <form method="POST" action="{{ route('file.forceDelete', $file->id) }}">
                                                     @csrf
                                                     @method('Delete')
-                                                    <x-dropdown-link
-                                                        onclick="return confirm('This file cannot restore after delete?')"
-                                                        :href="route('file.forceDelete', $file->id)"
-                                                        onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                    <x-dropdown-link :href="route('file.forceDelete', $file->id)"
+                                                        onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this file? \n File after delete cannot restore')) { this.closest('form').submit(); }">
                                                         {{ __('Delete') }}
                                                     </x-dropdown-link>
                                                 </form>

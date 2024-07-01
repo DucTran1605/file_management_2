@@ -7,7 +7,7 @@
                     <div class="flex items-center mb-4 sm:mb-0">
                         <form class="sm:pr-3" action="#" method="GET">
                             <label for="products-search" class="sr-only">Search</label>
-                            <div class="relative w-48 mt-1 sm:w-64 xl:w-96">
+                            <div class="relative w-48 sm:w-64 xl:w-96">
                                 <input type="text" name="email" id="products-search"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="Search in drive">
@@ -61,7 +61,8 @@
                             <div class="p-4 border-b dark:border-gray-700">
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">New Folder</h2>
                             </div>
-                            <form action="{{ route('folder.create') }}" enctype="multipart/form-data" method="POST">
+                            <form action="{{ route('folder.create', ['parent_id' => $folder_id ?? '']) }}"
+                                enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <div class="flex items-center justify-center w-full">
                                     <input type="text" id="default-input" name="folder_name"
@@ -90,6 +91,15 @@
                         </div>
                     </div>
                 </div>
+                @if (session()->has('cuted_file_id'))
+                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}" method="POST">
+                        @csrf
+                        <input type="hidden" value="null" name="parent_id">
+                        <td><button
+                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
+                        </td>
+                    </form>
+                @endif
             </div>
             <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
             </div>
@@ -139,7 +149,7 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                         @endif
-                                        {{ $file->name }}.{{ $file->extension }}
+                                        {{ $file->name }}
                                     @else
                                         <a href="{{ route('folder.show', $file->id) }}" class="flex items-center"><svg
                                                 class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -153,7 +163,7 @@
                                 </th>
                                 <td class="px-6 py-4">
                                     @if ($file->size == '')
-                                        {{ $file->size }}
+                                        <label for="" class="ml-2">-</label>
                                     @else
                                         {{ number_format($file->size / 1024) }} KB
                                     @endif
@@ -187,6 +197,15 @@
                                                         onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                                         {{ __('Delete') }}
+                                                    </x-dropdown-link>
+                                                </form>
+
+                                                <form method="POST" action="{{ route('file.cut', $file->id) }}">
+                                                    @csrf
+                                                    <x-dropdown-link :href="route('file.cut', $file->id)"
+                                                        onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                                        {{ __('Cut') }}
                                                     </x-dropdown-link>
                                                 </form>
 

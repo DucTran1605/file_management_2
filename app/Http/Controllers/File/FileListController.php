@@ -25,7 +25,7 @@ class FileListController extends Controller
 
     public function listSpecificFolder($id)
     {
-        $folder_id = File::findOrFail($id);
+        $folder_id = File::findOrFail($id); 
         $files = File::where([
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', $id]
