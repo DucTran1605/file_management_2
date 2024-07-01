@@ -61,7 +61,8 @@
                             <div class="p-4 border-b dark:border-gray-700">
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">New Folder</h2>
                             </div>
-                            <form action="{{ route('folder.create') }}" enctype="multipart/form-data" method="POST">
+                            <form action="{{ route('folder.create', ['parent_id' => $folder_id ?? '']) }}"
+                                enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <div class="flex items-center justify-center w-full">
                                     <input type="text" id="default-input" name="folder_name"
@@ -153,7 +154,7 @@
                                 </th>
                                 <td class="px-6 py-4">
                                     @if ($file->size == '')
-                                        {{ $file->size }}
+                                        <label for="" class="ml-2">-</label>
                                     @else
                                         {{ number_format($file->size / 1024) }} KB
                                     @endif

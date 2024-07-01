@@ -113,7 +113,12 @@
                                     {{ $file->name }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{ number_format($file->size / 1024) }} KB
+                                    @if ($file->size == '')
+                                        <label for="" class="ml-2">-</label>
+                                    @else
+                                        {{ number_format($file->size / 1024) }} KB
+                                    @endif
+
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $file->created_at->diffForHumans() }}
