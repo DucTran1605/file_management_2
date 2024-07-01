@@ -118,7 +118,6 @@
                                     @else
                                         {{ number_format($file->size / 1024) }} KB
                                     @endif
-
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $file->created_at->diffForHumans() }}
