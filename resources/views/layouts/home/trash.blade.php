@@ -143,11 +143,8 @@
                                                 <form method="POST" action="{{ route('file.forceDelete', $file->id) }}">
                                                     @csrf
                                                     @method('Delete')
-                                                    <x-dropdown-link
-                                                        onclick="return confirm('This file cannot restore after delete?')"
-                                                        :href="route('file.forceDelete', $file->id)"
-                                                        onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                    <x-dropdown-link :href="route('file.forceDelete', $file->id)"
+                                                        onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this file?')) { this.closest('form').submit(); }">
                                                         {{ __('Delete') }}
                                                     </x-dropdown-link>
                                                 </form>
