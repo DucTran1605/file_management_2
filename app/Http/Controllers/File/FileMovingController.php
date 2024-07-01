@@ -19,18 +19,26 @@ class FileMovingController extends Controller
         // Store the file ID in session for later pasting
         session(['cuted_file_id' => $id]);
 
-        dd(session()->all());
-
-        //return redirect()->back();
+        return redirect()->back();
     }
 
+    /**
+     * Paste file cut
+     *
+     * @param [type] $folder_id
+     * @return void
+     */
     public function filePaste($folder_id = null)
     {
         $fileId = session('cuted_file_id');
         $fileCut = File::findOrFail($fileId);
+
         $fileCut->update([
             "parent_id" => $folder_id
         ]);
+
+        session()->forget('cuted_file_id');
+
         return redirect()->back();
     }
 }

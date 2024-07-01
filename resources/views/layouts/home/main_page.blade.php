@@ -91,6 +91,15 @@
                         </div>
                     </div>
                 </div>
+                @if (session()->has('cuted_file_id'))
+                    <form action="{{ route('file.paste') }}" method="POST">
+                        @csrf
+                        <input type="hidden" value="null" name="parent_id">
+                        <td><button
+                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
+                        </td>
+                    </form>
+                @endif
             </div>
             <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
             </div>
@@ -188,6 +197,15 @@
                                                         onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                                         {{ __('Delete') }}
+                                                    </x-dropdown-link>
+                                                </form>
+
+                                                <form method="POST" action="{{ route('file.cut', $file->id) }}">
+                                                    @csrf
+                                                    <x-dropdown-link :href="route('file.cut', $file->id)"
+                                                        onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                                        {{ __('Cut') }}
                                                     </x-dropdown-link>
                                                 </form>
 
