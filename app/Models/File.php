@@ -44,18 +44,30 @@ class File extends Model
     }
 
     /**
-     * Scope a query to only include files.
+     * Recursively delete all child files and folders.
      */
-    public function scopeFiles($query)
+    public function deleteWithFileChildren()
     {
-        return $query->where('type', 'file');
+        // Recursively delete children
+        foreach ($this->children()->withTrashed()->get() as $child) {
+            $child->deleteWithFileChildren();
+        }
+
+        // Delete the current file/folder
+        $this->delete();
     }
 
     /**
-     * Scope a query to only include folders.
+     * Recursively restore all child files and folders.
      */
-    public function scopeFolders($query)
+    public function restoreWithFileChildren()
     {
-        return $query->where('type', 'folder');
+        // Recursively restore children
+        foreach ($this->children()->withTrashed()->get() as $child) {
+            $child->restoreWithFileChildren();
+        }
+
+        // restore the current file/folder
+        $this->restore();
     }
 }

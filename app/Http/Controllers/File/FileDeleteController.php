@@ -17,8 +17,17 @@ class FileDeleteController extends Controller
      */
     public function deleteSoftFile($id)
     {
-        $deleteFile = File::findOrFail($id);
-        $deleteFile->delete();
+        // Find the file/folder by its ID
+        $file = File::findOrFail($id);
+
+        // Check if it is a folder
+        if ($file->type == 'folder') {
+            // Recursively delete the folder and all its contents
+            $file->deleteWithFileChildren();
+        } else {
+            // Just delete the file
+            $file->delete();
+        }
 
         return redirect()->back()->with('message', 'Move file to the trash');
     }
@@ -32,7 +41,14 @@ class FileDeleteController extends Controller
     public function restoreFile($id)
     {
         $file = File::onlyTrashed()->findOrFail($id);
-        $file->restore();
+        // Check if it is a folder
+        if ($file->type == 'folder') {
+            // Recursively restore the folder and all its contents
+            $file->restoreWithFileChildren();
+        } else {
+            // Just restore the file
+            $file->restore();
+        }
         return redirect()->back()->with('message', 'Restore file success');
     }
 

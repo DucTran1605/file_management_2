@@ -22,10 +22,15 @@ class FileListController extends Controller
         return view('layouts.home.main_page', compact('files'));
     }
 
-
+    /**
+     * Show specific folder in main page
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function listSpecificFolder($id)
     {
-        $folder_id = File::findOrFail($id); 
+        $folder_id = File::findOrFail($id)->id;
         $files = File::where([
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', $id]
@@ -40,7 +45,9 @@ class FileListController extends Controller
      */
     public function showTrashedFile()
     {
-        $files = File::onlyTrashed()->where('user_id', '=', auth()->id())->get();
+        $files = File::onlyTrashed()->where([
+            ['user_id', '=', auth()->id()]
+        ])->get();
         return view('layouts.home.trash', compact('files'));
     }
 }
