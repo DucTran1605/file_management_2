@@ -21,30 +21,22 @@ class FileUploadController extends Controller
     {
         // Handle the validated file upload
         $uploadedFile = $request->file('file');
-        $originalName = $uploadedFile->getClientOriginalName();
-
-        //Check if user is in the root or in a folder
-        if ($folder_id == null) {
-            $filePath = null;
-        } else {
-            $filePath = File::findOrFail($folder_id)->name;
-        }
-
-        // Check if the file name already exists and generate a unique name
-        $filename = $this->generateUniqueFileName($originalName, $filePath);
+        $fileExtension = $uploadedFile->getClientOriginalExtension();
+        $uploadName = Str::random(40) . '.' . $fileExtension;
 
         // Optionally, additional details can be saved to the database
         File::create([
-            'name' => $filename,
+            'name' => $uploadedFile->getClientOriginalName(),
             'path' => Str::random(10),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
+            'uploadName' => $uploadName,
             'parent_id' => $folder_id,
             'user_id' => auth()->id(),
-            'extension' => $uploadedFile->getClientOriginalExtension(),
+            'extension' => $fileExtension,
         ]);
 
-        Storage::disk('s3')->putFileAs($filePath, $uploadedFile, $filename);
+        Storage::disk('s3')->putFileAs('', $uploadedFile, $uploadName);
 
         return redirect()->back()->with('message', 'File upload success');
     }
@@ -62,27 +54,5 @@ class FileUploadController extends Controller
         ]);
 
         return redirect()->back()->with('message', 'Folder create success');
-    }
-
-    /**
-     * Create a unique name for file
-     *
-     * @param [type] $originalName
-     * @param [type] $folder_id
-     * @return void
-     */
-    private function generateUniqueFileName($originalName, $filePath)
-    {
-        $name = pathinfo($originalName, PATHINFO_FILENAME);
-        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        $counter = 1;
-        $newName = $originalName;
-
-        while (Storage::disk('s3')->exists("{$filePath}/{$newName}")) {
-            $newName = $name . '_' . $counter . '.' . $extension;
-            $counter++;
-        }
-
-        return $newName;
     }
 }
