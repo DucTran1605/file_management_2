@@ -61,7 +61,7 @@ class FileDeleteController extends Controller
     public function forceDeleteFile($id)
     {
         $file = File::onlyTrashed()->findOrFail($id);
-        Storage::delete($file->name);
+        Storage::delete($file->uploadName);
         $file->forceDelete();
         return redirect()->back()->with('message', 'Delete file success');
     }
