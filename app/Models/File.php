@@ -15,6 +15,7 @@ class File extends Model
         'path',
         'size',
         'type',
+        'uploadName',
         'extension',
         'user_id',
         'parent_id',
