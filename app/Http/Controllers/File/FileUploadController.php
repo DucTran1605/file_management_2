@@ -48,6 +48,7 @@ class FileUploadController extends Controller
             'path' => Str::random(10),
             'size' => "",
             'type' => 'folder',
+            'uploadName' => "",
             'parent_id' => $folder_id,
             'user_id' => auth()->id(),
             'extension' => "",
