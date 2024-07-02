@@ -110,7 +110,7 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     @endif
-                                    {{ $file->name }}
+                                    <a id="openModalBtn">{{ $file->name }}</a>
                                 </th>
                                 <td class="px-6 py-4">
                                     @if ($file->size == '')
@@ -164,6 +164,20 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div id="modalBackdrop" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-lg overflow-hidden shadow-lg max-w-md w-full dark:bg-gray-800">
+            <div class="relative p-4 border-b dark:border-gray-700">
+                <button id="closeModalBtn"
+                    class="absolute top-2 right-2 bg-transparent border-0 text-gray-800 dark:text-gray-200 text-xl font-semibold">X
+                </button>
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">This folder is placed in trash</h2>
+                <hr class="my-2 border-gray-300 dark:border-gray-600">
+                <h5 class="text-base font-medium text-gray-800 dark:text-gray-200">You have to restore the folder if you
+                    want to see the folder detail</h5>
             </div>
         </div>
     </div>
