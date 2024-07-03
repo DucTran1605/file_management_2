@@ -41,6 +41,13 @@ class FileUploadController extends Controller
         return redirect()->back()->with('message', 'File upload success');
     }
 
+    /**
+     * Create folder
+     *
+     * @param Request $request
+     * @param [type] $folder_id
+     * @return void
+     */
     public function createFolder(Request $request, $folder_id = null)
     {
         File::create([
