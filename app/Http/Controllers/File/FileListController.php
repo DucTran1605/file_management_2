@@ -18,7 +18,7 @@ class FileListController extends Controller
         $files = File::where([
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', null]
-        ])->get();
+        ])->paginate(15);
         return view('layouts.home.main_page', compact('files'));
     }
 
@@ -34,7 +34,7 @@ class FileListController extends Controller
         $files = File::where([
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', $id]
-        ])->get();
+        ])->paginate(15);
         return view('layouts.home.main_page', compact('files', 'folder_id'));
     }
 
@@ -48,7 +48,7 @@ class FileListController extends Controller
         $files = File::onlyTrashed()->where([
             ['parent_id', '=', null],
             ['user_id', '=', auth()->id()]
-        ])->get();
+        ])->paginate(15);
         return view('layouts.home.trash', compact('files'));
     }
 
@@ -63,7 +63,7 @@ class FileListController extends Controller
         $files = File::onlyTrashed()->where([
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', $id]
-        ])->get();
+        ])->paginate(15);
         return view('layouts.home.trash', compact('files'));
     }
 }
