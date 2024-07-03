@@ -46,7 +46,23 @@ class FileListController extends Controller
     public function showTrashedFile()
     {
         $files = File::onlyTrashed()->where([
+            ['parent_id', '=', null],
             ['user_id', '=', auth()->id()]
+        ])->get();
+        return view('layouts.home.trash', compact('files'));
+    }
+
+    /**
+     * Show specific folder in trash
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function listSpecificTrashFolder($id)
+    {
+        $files = File::onlyTrashed()->where([
+            ['user_id', '=', auth()->id()],
+            ['parent_id', '=', $id]
         ])->get();
         return view('layouts.home.trash', compact('files'));
     }

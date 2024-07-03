@@ -5,10 +5,12 @@
             <div class="flex items-center justify-start bg-gray-50 h-28 dark:bg-gray-800">
                 <div class="items-center block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700 ml-2">
                     <div class="flex items-center mb-4 sm:mb-0">
-                        <form class="sm:pr-3" action="#" method="GET">
+                        <form class="sm:pr-3" action="{{ route('fileTrash.search', ['parent_id' => $folder_id ?? '']) }}"
+                            method="GET" enctype="multipart/form-data">
+                            @csrf
                             <label for="products-search" class="sr-only">Search</label>
                             <div class="relative w-48 sm:w-64 xl:w-96">
-                                <input type="text" name="email" id="products-search"
+                                <input type="text" name="file_search" id="file-search"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="Search in drive">
                             </div>
@@ -88,29 +90,33 @@
                                         $textExtensions = ['txt', 'md', 'csv', 'log', 'json', 'xml', 'html'];
                                         $fileExtension = $file->extension;
                                     @endphp
-                                    @if (in_array($fileExtension, $imageExtensions))
-                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm.394 9.553a1 1 0 0 0-1.817.062l-2.5 6A1 1 0 0 0 8 19h8a1 1 0 0 0 .894-1.447l-2-4A1 1 0 0 0 13.2 13.4l-.53.706-1.276-2.553ZM13 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    @elseif (in_array($fileExtension, $textExtensions))
-                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
+                                    @if ($file->type == 'file')
+                                        @if (in_array($fileExtension, $imageExtensions))
+                                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd"
+                                                    d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm.394 9.553a1 1 0 0 0-1.817.062l-2.5 6A1 1 0 0 0 8 19h8a1 1 0 0 0 .894-1.447l-2-4A1 1 0 0 0 13.2 13.4l-.53.706-1.276-2.553ZM13 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        @elseif (in_array($fileExtension, $textExtensions))
+                                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd"
+                                                    d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        @endif
+                                        {{ $file->name }}
                                     @else
-                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd"
-                                                d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
+                                        <a href="{{ route('folderTrash.show', $file->id) }}" class="flex items-center"><svg
+                                                class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd"
+                                                    d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $file->name }}</a>
                                     @endif
-                                    <a id="openModalBtn">{{ $file->name }}</a>
                                 </th>
                                 <td class="px-6 py-4">
                                     @if ($file->size == '')
@@ -164,20 +170,6 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-    <div id="modalBackdrop" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
-        <!-- Modal Content -->
-        <div class="relative bg-white rounded-lg overflow-hidden shadow-lg max-w-md w-full dark:bg-gray-800">
-            <div class="relative p-4 border-b dark:border-gray-700">
-                <button id="closeModalBtn"
-                    class="absolute top-2 right-2 bg-transparent border-0 text-gray-800 dark:text-gray-200 text-xl font-semibold">X
-                </button>
-                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">This folder is placed in trash</h2>
-                <hr class="my-2 border-gray-300 dark:border-gray-600">
-                <h5 class="text-base font-medium text-gray-800 dark:text-gray-200">You have to restore the folder if you
-                    want to see the folder detail</h5>
             </div>
         </div>
     </div>

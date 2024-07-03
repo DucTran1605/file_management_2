@@ -32,10 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/file/{id}/cut', [FileMovingController::class, 'fileCut'])->name('file.cut');
     Route::post('/filePaste/{parent_id?}', [FileMovingController::class, 'filePaste'])->name('file.paste');
     Route::get('/fileSearch/{parent_id?}', [FileSearchController::class, 'fileSearch'])->name('file.search');
+    Route::get('/fileTrashSearch/{parent_id?}', [FileSearchController::class, 'fileTrashSearch'])->name('fileTrash.search');
 
     //Route for Folder
     Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');
     Route::get('/folder/{id}', [FileListController::class, 'listSpecificFolder'])->name('folder.show');
+    Route::get('/folderTrash/{id}', [FileListController::class, 'listSpecificTrashFolder'])->name('folderTrash.show');
 });
 
 require __DIR__ . '/auth.php';
