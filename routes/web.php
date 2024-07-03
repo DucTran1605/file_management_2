@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/filePaste/{parent_id?}', [FileMovingController::class, 'filePaste'])->name('file.paste');
     Route::get('/fileSearch/{parent_id?}', [FileSearchController::class, 'fileSearch'])->name('file.search');
     Route::get('/fileTrashSearch/{parent_id?}', [FileSearchController::class, 'fileTrashSearch'])->name('fileTrash.search');
+    Route::get('/file/download/{id}', [FileDownloadController::class, 'downloadFolder'])->name('file.download');
 
     //Route for Folder
     Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');

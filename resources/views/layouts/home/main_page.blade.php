@@ -239,6 +239,10 @@
                                                     <button value="copy"
                                                         onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Copy') }}</button>
                                                 </x-dropdown-link>
+
+                                                <x-dropdown-link>
+                                                    <a href="{{ route('file.download', $file->id) }}">{{ __('Download') }}</a>
+                                                </x-dropdown-link>
                                             </x-slot>
                                         </x-dropdown>
                                     </div>
