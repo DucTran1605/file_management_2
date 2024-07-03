@@ -60,9 +60,19 @@ class FileDeleteController extends Controller
      */
     public function forceDeleteFile($id)
     {
+        // Find the file/folder by its ID
         $file = File::onlyTrashed()->findOrFail($id);
-        Storage::delete($file->uploadName);
-        $file->forceDelete();
+
+        // Check if it is a folder
+        if ($file->type == 'folder') {
+            // Recursively delete the folder and all its contents
+            $file->deletePermentlyWithFileChildren();
+        } else {
+            // Just delete the file
+            $file->forceDelete();
+            Storage::delete($file->uploadName);
+        }
+
         return redirect()->back()->with('message', 'Delete file success');
     }
 }

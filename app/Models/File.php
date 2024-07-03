@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class File extends Model
 {
@@ -56,6 +57,27 @@ class File extends Model
 
         // Delete the current file/folder
         $this->delete();
+    }
+
+    /**
+     * Recursively delete permently all child files and folders.
+     */
+    public function deletePermentlyWithFileChildren()
+    {
+        // Recursively delete children
+        foreach ($this->children()->withTrashed()->get() as $child) {
+            $child->deletePermentlyWithFileChildren();
+        }
+
+        // If the type is 'file', then delete the file from S3
+        if ($this->type == 'file') {
+            Storage::delete($this->uploadName);
+            // Delete the current file/folder
+            $this->forceDelete();
+        } else {
+            // Delete the current file/folder
+            $this->forceDelete();
+        }
     }
 
     /**
