@@ -215,11 +215,32 @@
                                                     @click="$dispatch('set-file', {{ Js::from($file) }}); $dispatch('open-modal', 'file-detail-modal')">
                                                     {{ __('File Detail') }}
                                                 </x-dropdown-link>
+
+                                                <x-dropdown-link>
+                                                    <input type="text" class="hidden" id="copy_{{ $file->id }}"
+                                                        value="{{ $file->path }}">
+                                                    <button value="copy"
+                                                        onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Copy') }}</button>
+                                                </x-dropdown-link>
                                             </x-slot>
                                         </x-dropdown>
                                     </div>
                                 </td>
                             </tr>
+                            <script>
+                                function copyToClipboard(id) {
+                                    // Get the text field
+                                    var copyText = document.getElementById(id);
+
+                                    // Select the text field
+                                    copyText.select();
+
+                                    // Copy the text inside the text field
+                                    navigator.clipboard.writeText(copyText.value);
+
+                                    alert("Copied the text: " + copyText.value);
+                                }
+                            </script>
                         @endforeach
                     </tbody>
                 </table>
