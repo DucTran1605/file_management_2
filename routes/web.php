@@ -6,6 +6,7 @@ use App\Http\Controllers\File\FileDownloadController;
 use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileMovingController;
 use App\Http\Controllers\File\FileSearchController;
+use App\Http\Controllers\File\FileShareController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Models\File;
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/fileSearch/{parent_id?}', [FileSearchController::class, 'fileSearch'])->name('file.search');
     Route::get('/fileTrashSearch/{parent_id?}', [FileSearchController::class, 'fileTrashSearch'])->name('fileTrash.search');
     Route::get('/file/download/{id}', [FileDownloadController::class, 'downloadFolder'])->name('file.download');
+    Route::get('/fileShare/{url}', [FileShareController::class, 'shareFile'])->name('file.share');
 
     //Route for Folder
     Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');
