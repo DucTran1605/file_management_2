@@ -25,14 +25,6 @@ class File extends Model
     ];
 
     /**
-     * Get the user that owns the file.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
      * Get the parent folder of the file.
      */
     public function parent()
