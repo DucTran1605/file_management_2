@@ -11,6 +11,7 @@ use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Models\File;
 use Illuminate\Support\Facades\Route;
+use Spatie\Activitylog\Models\Activity;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -46,5 +47,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::get('/test', function () {
-    return view('layouts.test');
+    activity()->log('test');
+
+    return Activity::all();
 })->name('test');

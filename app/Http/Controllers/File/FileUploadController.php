@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\File\FileUploadRequest;
+use Spatie\Activitylog\Models\Activity;
 
 class FileUploadController extends Controller
 {
@@ -39,7 +40,8 @@ class FileUploadController extends Controller
 
         Storage::disk('s3')->putFileAs('', $uploadedFile, $uploadName);
 
-        return redirect()->back()->with('message', 'File upload success');
+        //return redirect()->back()->with('message', 'File upload success');
+        return Activity::all();
     }
 
     /**
