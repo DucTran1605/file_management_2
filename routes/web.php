@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
     Route::delete('/file/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
     Route::get('/file/{id}/detail', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
-    Route::put('/file/{id}/update', [FileDetailController::class, 'changeFileName'])->name('file.edit');
+    Route::put('/fileEdit/{id}', [FileDetailController::class, 'changeFileName'])->name('file.edit');
     Route::post('/file/{id}/cut', [FileMovingController::class, 'fileCut'])->name('file.cut');
     Route::post('/filePaste/{parent_id?}', [FileMovingController::class, 'filePaste'])->name('file.paste');
     Route::get('/fileSearch/{parent_id?}', [FileSearchController::class, 'fileSearch'])->name('file.search');
