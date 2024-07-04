@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Activity\ActivityListController;
 use App\Http\Controllers\File\FileDeleteController;
 use App\Http\Controllers\File\FileDetailController;
 use App\Http\Controllers\File\FileDownloadController;
@@ -42,12 +43,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');
     Route::get('/folder/{id}', [FileListController::class, 'listSpecificFolder'])->name('folder.show');
     Route::get('/folderTrash/{id}', [FileListController::class, 'listSpecificTrashFolder'])->name('folderTrash.show');
+
+    //Route for activity
+    Route::get('/showAllActivity', [ActivityListController::class, 'listAllFile'])->name('activity.show');
 });
 
 require __DIR__ . '/auth.php';
 
 Route::get('/test', function () {
-    activity()->log('test');
-
-    return Activity::all();
 })->name('test');

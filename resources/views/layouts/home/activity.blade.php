@@ -5,134 +5,8 @@
             <div class="flex items-center justify-start bg-gray-50 h-28 dark:bg-gray-800">
                 <div class="items-center block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700 ml-2">
                     <div class="flex items-center mb-4 sm:mb-0">
-                        <form class="sm:pr-3" action="{{ route('file.search', ['parent_id' => $folder_id ?? '']) }}"
-                            method="GET" enctype="multipart/form-data">
-                            @csrf
-                            <label for="products-search" class="sr-only">Search</label>
-                            <div class="relative w-48 sm:w-64 xl:w-96">
-                                <input type="text" name="file_search" id="file-search"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Search in drive">
-                            </div>
-                        </form>
                     </div>
                 </div>
-                <!-- Settings Dropdown -->
-                <div class="hidden sm:flex sm:items-center sm:ms-1">
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button
-                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                <div>NEW</div>
-
-                                <div class="ms-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M5 12h14m-7 7V5" />
-                                    </svg>
-                                </div>
-                            </button>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <form action="{{ route('file.upload', ['parent_id' => $folder_id ?? '']) }}" method="POST"
-                                enctype="multipart/form-data" id="image-upload">
-                                @csrf
-                                <button
-                                    class="btn block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
-                                    id="file_button" name="file_button" type="button"
-                                    onclick="document.getElementById('file_input').click();">
-                                    Upload File
-                                </button>
-                                <input class="hidden" id="file_input" name="file" type="file"
-                                    onchange="document.getElementById('image-upload').submit();">
-                            </form>
-
-                            <button id="openModalBtn"
-                                class="btn block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">Create
-                                folder
-                            </button>
-                        </x-slot>
-                    </x-dropdown>
-                    <!-- Modal Background (Hidden by Default) -->
-                    <div id="modalBackdrop"
-                        class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
-                        <!-- Modal Content -->
-                        <div class="bg-white rounded-lg overflow-hidden shadow-lg max-w-md w-full dark:bg-gray-800">
-                            <div class="p-4 border-b dark:border-gray-700">
-                                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">New Folder</h2>
-                            </div>
-                            <form action="{{ route('folder.create', ['parent_id' => $folder_id ?? '']) }}"
-                                enctype="multipart/form-data" method="POST">
-                                @csrf
-                                <div class="flex items-center justify-center w-full">
-                                    <input type="text" id="default-input" name="folder_name"
-                                        class="mr-2 ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </div>
-                                <div class="p-4 border-t flex justify-end dark:border-gray-700">
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-green-600 text-white rounded-md mr-2">Submit</button>
-                                    <button id="closeModalBtn" class="px-4 py-2 bg-red-600 text-white rounded-md"
-                                        type="button">Close</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- Error Messages -->
-                @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        <div class="ml-2 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-                            role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div>
-                                <span class="font-medium">Danger alert!</span> {{ $error }}
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-                @if (session()->has('message'))
-                    <div class="flex items-center p-4 ml-1 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
-                        role="alert">
-                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                        </svg>
-                        <span class="sr-only">Info</span>
-                        <div>
-                            <span class="font-medium">Success!</span> {{ session()->get('message') }}
-                        </div>
-                    </div>
-                @endif
-                <!-- Modal Background (Hidden by Default) -->
-                <div id="modalBackdrop"
-                    class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
-                    <!-- Modal Content -->
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg max-w-md w-full dark:bg-gray-800">
-                        <div class="p-4 border-b dark:border-gray-700">
-                            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Upload File</h2>
-                        </div>
-                        <div class="p-4 border-t flex justify-end dark:border-gray-700">
-                            <button id="closeModalBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Close</button>
-                        </div>
-                    </div>
-                </div>
-                @if (session()->has('cuted_file_id'))
-                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}" method="POST">
-                        @csrf
-                        <input type="hidden" value="null" name="parent_id">
-                        <td><button
-                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
-                        </td>
-                    </form>
-                @endif
             </div>
             <div class="flex items-center justify-end bg-gray-50 h-28 dark:bg-gray-800">
             </div>
@@ -146,27 +20,27 @@
                                 File name
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Size
+                                Event
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Uploaded
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                <span class="ml-4">Action</span>
+                                Owner
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($files as $file)
+                        @foreach ($activities as $activity)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th scope="row"
                                     class="px-6 py-4 flex font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     @php
                                         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
                                         $textExtensions = ['txt', 'md', 'csv', 'log', 'json', 'xml', 'html'];
-                                        $fileExtension = $file->extension;
+                                        $fileExtension = $activity->subject->extension;
                                     @endphp
-                                    @if ($file->type == 'file')
+                                    @if ($activity->subject->type == 'file')
                                         @if (in_array($fileExtension, $imageExtensions))
                                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
                                                 height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -182,105 +56,31 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                         @endif
-                                        {{ $file->name }}
+                                        {{ $activity->subject ? $activity->subject->name : 'N/A' }}
                                     @else
-                                        <a href="{{ route('folder.show', $file->id) }}" class="flex items-center"><svg
-                                                class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                height="24" fill="currentColor" viewBox="0 0 24 24">
-                                                <path fill-rule="evenodd"
-                                                    d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            {{ $file->name }}</a>
+                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd"
+                                                d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $activity->subject ? $activity->subject->name : 'N/A' }}
                                     @endif
                                 </th>
                                 <td class="px-6 py-4">
-                                    @if ($file->size == '')
-                                        <label for="" class="ml-2">-</label>
-                                    @else
-                                        {{ number_format($file->size / 1024) }} KB
-                                    @endif
-
+                                    {{ $activity->description }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $file->created_at->diffForHumans() }}
+                                    {{ $activity->created_at }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <!-- Settings Dropdown -->
-                                    <div class="hidden sm:flex sm:items-center sm:ms-6">
-                                        <x-dropdown align="right" width="48">
-                                            <x-slot name="trigger">
-                                                <button>
-                                                    <div class="ms-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-width="3" d="M12 6h.01M12 12h.01M12 18h.01" />
-                                                        </svg>
-                                                    </div>
-                                                </button>
-                                            </x-slot>
-
-                                            <x-slot name="content">
-                                                <!-- Delete File -->
-                                                <form method="POST" action="{{ route('file.delete', $file->id) }}">
-                                                    @csrf
-                                                    @method('Delete')
-                                                    <x-dropdown-link :href="route('file.delete', $file->id)"
-                                                        onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                                        {{ __('Delete') }}
-                                                    </x-dropdown-link>
-                                                </form>
-
-                                                <form method="POST" action="{{ route('file.cut', $file->id) }}">
-                                                    @csrf
-                                                    <x-dropdown-link :href="route('file.cut', $file->id)"
-                                                        onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                                        {{ __('Cut') }}
-                                                    </x-dropdown-link>
-                                                </form>
-
-                                                <x-dropdown-link
-                                                    @click="$dispatch('set-file', {{ Js::from($file) }}); $dispatch('open-modal', 'file-detail-modal')">
-                                                    {{ __('File Detail') }}
-                                                </x-dropdown-link>
-
-                                                <x-dropdown-link>
-                                                    <input type="text" class="hidden" id="copy_{{ $file->id }}"
-                                                        value="fileShare/{{ $file->path }}">
-                                                    <button value="copy"
-                                                        onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Share file') }}</button>
-                                                </x-dropdown-link>
-
-                                                <x-dropdown-link :href="route('file.download', $file->id)">
-                                                    {{ __('Download') }}
-                                                </x-dropdown-link>
-                                            </x-slot>
-                                        </x-dropdown>
-                                    </div>
+                                    {{ $activity->causer->name }}
                                 </td>
                             </tr>
-                            <script>
-                                function copyToClipboard(id) {
-                                    // Get the text field
-                                    var copyText = document.getElementById(id);
-
-                                    // Select the text field
-                                    copyText.select();
-
-                                    // Copy the text inside the text field
-                                    navigator.clipboard.writeText(copyText.value);
-
-                                    alert("Copied share link: " + copyText.value);
-                                }
-                            </script>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    @include('layouts.partials.modal')
 @endsection
