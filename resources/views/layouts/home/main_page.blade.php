@@ -273,7 +273,7 @@
                                     // Copy the text inside the text field
                                     navigator.clipboard.writeText(copyText.value);
 
-                                    alert("Copied the text: " + copyText.value);
+                                    alert("Copied share link: " + copyText.value);
                                 }
                             </script>
                         @endforeach
