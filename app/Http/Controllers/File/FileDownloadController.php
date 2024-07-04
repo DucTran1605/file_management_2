@@ -42,7 +42,7 @@ class FileDownloadController extends Controller
      * @param string $rootPath
      * @return void
      */
-    private function addFolderToZip(ZipArchive $zip, File $file, $rootPath)
+    public function addFolderToZip(ZipArchive $zip, File $file, $rootPath)
     {
         // Determine current path
         $currentPath = $rootPath ? $rootPath . '/' . $file->name : $file->name;
