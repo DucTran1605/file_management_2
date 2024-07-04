@@ -23,10 +23,11 @@ class FileUploadController extends Controller
         $uploadedFile = $request->file('file');
         $fileExtension = $uploadedFile->getClientOriginalExtension();
         $uploadName = Str::random(40) . '.' . $fileExtension;
+        $originalName = $uploadedFile->getClientOriginalName();
 
         // Optionally, additional details can be saved to the database
         File::create([
-            'name' => $uploadedFile->getClientOriginalName(),
+            'name' => $this->generateUniqueFileName($originalName, $folder_id),
             'path' => Str::random(10),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
@@ -50,8 +51,10 @@ class FileUploadController extends Controller
      */
     public function createFolder(Request $request, $folder_id = null)
     {
+        $originalName = $request->folder_name;
+
         File::create([
-            'name' => $request->folder_name,
+            'name' => $this->generateUniqueFoldeName($originalName, $folder_id),
             'path' => Str::random(10),
             'size' => "",
             'type' => 'folder',
@@ -62,5 +65,48 @@ class FileUploadController extends Controller
         ]);
 
         return redirect()->back()->with('message', 'Folder create success');
+    }
+
+    /**
+     * Generate Unique File Name
+     *
+     * @param [type] $originalName
+     * @param [type] $folder_id
+     * @return void
+     */
+    private function generateUniqueFileName($originalName, $folder_id)
+    {
+        $name = pathinfo($originalName, PATHINFO_FILENAME);
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        $counter = 1;
+        $newName = $originalName;
+
+        while (File::where('name', $newName)->where('parent_id', $folder_id)->exists()) {
+            $newName = $name . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+
+        return $newName;
+    }
+
+    /**
+     * Generate Unique Folder Name
+     *
+     * @param [type] $originalName
+     * @param [type] $folder_id
+     * @return void
+     */
+    private function generateUniqueFoldeName($originalName, $folder_id)
+    {
+        $name = pathinfo($originalName, PATHINFO_FILENAME);
+        $counter = 1;
+        $newName = $originalName;
+
+        while (File::where('name', $newName)->where('parent_id', $folder_id)->exists()) {
+            $newName = $name . '_' . $counter;
+            $counter++;
+        }
+
+        return $newName;
     }
 }
