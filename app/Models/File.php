@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class File extends Model
 {
@@ -72,6 +73,14 @@ class File extends Model
             // Delete the current file/folder
             $this->forceDelete();
         }
+        $fileActivity = Activity::where(
+            [
+                ['subject_id', '=', $this->id]
+            ]
+        )->get();
+        foreach ($fileActivity as $activity) {
+            $activity->delete();
+        }
     }
 
     /**
@@ -96,7 +105,7 @@ class File extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['name']);
+            ->logOnly(['name']);
         // Chain fluent methods for configuration options
     }
 }
