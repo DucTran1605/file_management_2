@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Activity\ActivityListController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\File\FileDeleteController;
 use App\Http\Controllers\File\FileDetailController;
 use App\Http\Controllers\File\FileDownloadController;
@@ -10,13 +11,9 @@ use App\Http\Controllers\File\FileSearchController;
 use App\Http\Controllers\File\FileShareController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
-use App\Models\File;
 use Illuminate\Support\Facades\Route;
-use Spatie\Activitylog\Models\Activity;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [AuthenticatedSessionController::class, 'store']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
