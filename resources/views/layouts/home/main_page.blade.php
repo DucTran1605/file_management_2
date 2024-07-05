@@ -5,10 +5,12 @@
             <div class="flex items-center justify-start bg-gray-50 h-28 dark:bg-gray-800">
                 <div class="items-center block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700 ml-2">
                     <div class="flex items-center mb-4 sm:mb-0">
-                        <form class="sm:pr-3" action="#" method="GET">
+                        <form class="sm:pr-3" action="{{ route('file.search', ['parent_id' => $folder_id ?? '']) }}"
+                            method="GET" enctype="multipart/form-data">
+                            @csrf
                             <label for="products-search" class="sr-only">Search</label>
                             <div class="relative w-48 sm:w-64 xl:w-96">
-                                <input type="text" name="email" id="products-search"
+                                <input type="text" name="file_search" id="file-search"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="Search in drive">
                             </div>
@@ -16,7 +18,7 @@
                     </div>
                 </div>
                 <!-- Settings Dropdown -->
-                <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <div class="hidden sm:flex sm:items-center sm:ms-1">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -78,6 +80,37 @@
                         </div>
                     </div>
                 </div>
+                <!-- Error Messages -->
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="ml-2 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+                            role="alert">
+                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Danger alert!</span> {{ $error }}
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+                @if (session()->has('message'))
+                    <div class="flex items-center p-4 ml-1 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+                        role="alert">
+                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Success!</span> {{ session()->get('message') }}
+                        </div>
+                    </div>
+                @endif
                 <!-- Modal Background (Hidden by Default) -->
                 <div id="modalBackdrop"
                     class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
@@ -213,11 +246,36 @@
                                                     @click="$dispatch('set-file', {{ Js::from($file) }}); $dispatch('open-modal', 'file-detail-modal')">
                                                     {{ __('File Detail') }}
                                                 </x-dropdown-link>
+
+                                                <x-dropdown-link>
+                                                    <input type="text" class="hidden" id="copy_{{ $file->id }}"
+                                                        value="fileShare/{{ $file->path }}">
+                                                    <button value="copy"
+                                                        onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Share file') }}</button>
+                                                </x-dropdown-link>
+
+                                                <x-dropdown-link :href="route('file.download', $file->id)">
+                                                    {{ __('Download') }}
+                                                </x-dropdown-link>
                                             </x-slot>
                                         </x-dropdown>
                                     </div>
                                 </td>
                             </tr>
+                            <script>
+                                function copyToClipboard(id) {
+                                    // Get the text field
+                                    var copyText = document.getElementById(id);
+
+                                    // Select the text field
+                                    copyText.select();
+
+                                    // Copy the text inside the text field
+                                    navigator.clipboard.writeText(copyText.value);
+
+                                    alert("Copied share link: " + copyText.value);
+                                }
+                            </script>
                         @endforeach
                     </tbody>
                 </table>

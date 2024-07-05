@@ -20,9 +20,21 @@ class FileDetailController extends Controller
     public function changeFileName(FileNameRequest $request, $id)
     {
         $fileDetail = File::findOrFail($id);
+        $newName = $request->only('name')['name'];
 
-        $fileDetail->update($request->only('name'));
+        if ($fileDetail->type === "file") {
+            // Check if the new name has an extension
+            if (!str_contains($newName, '.')) {
+                $newName .= '.' . $fileDetail->extension;
+            }
+        }
+        // Update the file name
+        $fileDetail->update(['name' => $newName]);
 
-        return back();
+        if ($fileDetail->type === 'folder') {
+            return back()->with('message', 'Folder name update success');
+        } else {
+            return back()->with('message', 'File name update success');
+        }
     }
 }

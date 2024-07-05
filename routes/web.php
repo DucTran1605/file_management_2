@@ -1,16 +1,19 @@
 <?php
 
+use App\Http\Controllers\Activity\ActivityListController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\File\FileDeleteController;
 use App\Http\Controllers\File\FileDetailController;
 use App\Http\Controllers\File\FileDownloadController;
 use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileMovingController;
+use App\Http\Controllers\File\FileSearchController;
+use App\Http\Controllers\File\FileShareController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\ProfileController;
-use App\Models\File;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [FileListController::class, 'listAllFile'])->name('file.show');
+Route::get('/', [AuthenticatedSessionController::class, 'store']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,17 +28,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/file/{id}/restore', [FileDeleteController::class, 'restoreFile'])->name('files.restore');
     Route::delete('/file/{id}/force_delete', [FileDeleteController::class, 'forceDeleteFile'])->name('file.forceDelete');
     Route::get('/file/{id}/detail', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
-    Route::put('/file/{id}/update', [FileDetailController::class, 'changeFileName'])->name('file.edit');
-    Route::post('file/{id}/cut', [FileMovingController::class, 'fileCut'])->name('file.cut');
-    Route::post('filePaste/{parent_id?}', [FileMovingController::class, 'filePaste'])->name('file.paste');
+    Route::put('/fileEdit/{id}', [FileDetailController::class, 'changeFileName'])->name('file.edit');
+    Route::post('/file/{id}/cut', [FileMovingController::class, 'fileCut'])->name('file.cut');
+    Route::post('/filePaste/{parent_id?}', [FileMovingController::class, 'filePaste'])->name('file.paste');
+    Route::get('/fileSearch/{parent_id?}', [FileSearchController::class, 'fileSearch'])->name('file.search');
+    Route::get('/fileTrashSearch/{parent_id?}', [FileSearchController::class, 'fileTrashSearch'])->name('fileTrash.search');
+    Route::get('/file/download/{id}', [FileDownloadController::class, 'downloadFolder'])->name('file.download');
+    Route::get('/fileShare/{url}', [FileShareController::class, 'shareFile'])->name('file.share');
 
     //Route for Folder
     Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');
     Route::get('/folder/{id}', [FileListController::class, 'listSpecificFolder'])->name('folder.show');
+    Route::get('/folderTrash/{id}', [FileListController::class, 'listSpecificTrashFolder'])->name('folderTrash.show');
+
+    //Route for activity
+    Route::get('/showAllActivity', [ActivityListController::class, 'listAllFile'])->name('activity.show');
 });
 
 require __DIR__ . '/auth.php';
 
 Route::get('/test', function () {
-    return view('layouts.test');
 })->name('test');

@@ -25,4 +25,16 @@ class FileNameRequest extends FormRequest
             'name' => 'required|string|max:255'
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'A folder name is required.',
+        ];
+    }
 }

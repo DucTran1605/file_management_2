@@ -2,31 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class File extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'name',
         'path',
         'size',
         'type',
+        'uploadName',
         'extension',
         'user_id',
         'parent_id',
     ];
-
-    /**
-     * Get the user that owns the file.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     /**
      * Get the parent folder of the file.
@@ -44,18 +41,71 @@ class File extends Model
     }
 
     /**
-     * Scope a query to only include files.
+     * Recursively delete all child files and folders.
      */
-    public function scopeFiles($query)
+    public function deleteWithFileChildren()
     {
-        return $query->where('type', 'file');
+        // Recursively delete children
+        foreach ($this->children()->withTrashed()->get() as $child) {
+            $child->deleteWithFileChildren();
+        }
+
+        // Delete the current file/folder
+        $this->delete();
     }
 
     /**
-     * Scope a query to only include folders.
+     * Recursively delete permently all child files and folders.
      */
-    public function scopeFolders($query)
+    public function deletePermentlyWithFileChildren()
     {
-        return $query->where('type', 'folder');
+        // Recursively delete children
+        foreach ($this->children()->withTrashed()->get() as $child) {
+            $child->deletePermentlyWithFileChildren();
+        }
+
+        // If the type is 'file', then delete the file from S3
+        if ($this->type == 'file') {
+            Storage::delete($this->uploadName);
+            // Delete the current file/folder
+            $this->forceDelete();
+        } else {
+            // Delete the current file/folder
+            $this->forceDelete();
+        }
+        $fileActivity = Activity::where(
+            [
+                ['subject_id', '=', $this->id]
+            ]
+        )->get();
+        foreach ($fileActivity as $activity) {
+            $activity->delete();
+        }
+    }
+
+    /**
+     * Recursively restore all child files and folders.
+     */
+    public function restoreWithFileChildren()
+    {
+        // Recursively restore children
+        foreach ($this->children()->withTrashed()->get() as $child) {
+            $child->restoreWithFileChildren();
+        }
+
+        // restore the current file/folder
+        $this->restore();
+    }
+
+    /**
+     * Write log for File
+     *
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name']);
+        // Chain fluent methods for configuration options
     }
 }
