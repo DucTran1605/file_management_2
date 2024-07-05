@@ -23,6 +23,6 @@ class FileDetailController extends Controller
 
         $fileDetail->update($request->only('name'));
 
-        return back();
+        return back()->with('message', 'Folder name update success');
     }
 }
