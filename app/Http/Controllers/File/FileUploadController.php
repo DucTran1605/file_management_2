@@ -40,8 +40,7 @@ class FileUploadController extends Controller
 
         Storage::disk('s3')->putFileAs('', $uploadedFile, $uploadName);
 
-        //return redirect()->back()->with('message', 'File upload success');
-        return Activity::all();
+        return redirect()->back()->with('message', 'File upload success');
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Models\Activity;
 
 class FileDeleteController extends Controller
 {
@@ -72,7 +73,14 @@ class FileDeleteController extends Controller
             $file->forceDelete();
             Storage::delete($file->uploadName);
         }
-
+        $fileActivity = Activity::where(
+            [
+                ['subject_id', '=', $id]
+            ]
+        )->get();
+        foreach ($fileActivity as $activity) {
+            $activity->delete();
+        }
         return redirect()->back()->with('message', 'Delete file success');
     }
 }
