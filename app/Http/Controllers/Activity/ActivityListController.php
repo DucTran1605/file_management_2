@@ -16,9 +16,11 @@ class ActivityListController extends Controller
      */
     public function listAllFile()
     {
-        $activities = Activity::where([
+        $activities = Activity::with(['subject' => function ($query) {
+            $query->withTrashed();
+        }])->where([
             ['causer_id', '=', auth()->id()],
-        ])->paginate(15);
+        ])->orderBy('created_at', 'desc')->paginate(15);
 
         return view('layouts.home.activity', compact('activities'));
     }
