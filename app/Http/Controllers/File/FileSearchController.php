@@ -23,13 +23,13 @@ class FileSearchController extends Controller
             $files = File::where([
                 ['parent_id', '=', $folder_id],
                 ['user_id', '=', auth()->id()],
-            ])->get();
+            ])->paginate(15);
         } else {
             $files = File::where([
                 ['parent_id', '=', $folder_id],
                 ['name', 'Like', '%' . $fileNameSearch . '%'],
                 ['user_id', '=', auth()->id()],
-            ])->get();
+            ])->paginate(15);
         }
 
         return view('layouts.home.main_page', compact('files'));
@@ -55,7 +55,7 @@ class FileSearchController extends Controller
                 ['parent_id', '=', $folder_id],
                 ['name', 'Like', '%' . $fileNameSearch . '%'],
                 ['user_id', '=', auth()->id()],
-            ])->get();
+            ])->paginate(15);
         }
 
         return view('layouts.home.trash', compact('files'));

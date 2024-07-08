@@ -6,8 +6,7 @@
                 <div class="items-center block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700 ml-2">
                     <div class="flex items-center mb-4 sm:mb-0">
                         <form class="sm:pr-3" action="{{ route('file.search', ['parent_id' => $folder_id ?? '']) }}"
-                            method="GET" enctype="multipart/form-data">
-                            @csrf
+                            method="GET">
                             <label for="products-search" class="sr-only">Search</label>
                             <div class="relative w-48 sm:w-64 xl:w-96">
                                 <input type="text" name="file_search" id="file-search"
@@ -140,18 +139,18 @@
         <div class="flex items-start bg-gray-50 dark:bg-gray-800 min-h-screen">
             <div class="w-full">
                 <table class="w-full max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 ">
                                 File name
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 ">
                                 Size
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 ">
                                 Uploaded
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 ">
                                 <span class="ml-4">Action</span>
                             </th>
                         </tr>
@@ -160,7 +159,7 @@
                         @foreach ($files as $file)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <th scope="row"
-                                    class="px-6 py-4 flex font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    class="px-6 py-4  flex font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     @php
                                         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
                                         $textExtensions = ['txt', 'md', 'csv', 'log', 'json', 'xml', 'html'];
@@ -194,7 +193,7 @@
                                             {{ $file->name }}</a>
                                     @endif
                                 </th>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 ">
                                     @if ($file->size == '')
                                         <label for="" class="ml-2">-</label>
                                     @else
@@ -202,10 +201,10 @@
                                     @endif
 
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 ">
                                     {{ $file->created_at->diffForHumans() }}
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 ">
                                     <!-- Settings Dropdown -->
                                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                                         <x-dropdown align="right" width="48">
@@ -227,8 +226,7 @@
                                                     @csrf
                                                     @method('Delete')
                                                     <x-dropdown-link :href="route('file.delete', $file->id)"
-                                                        onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                        onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this file?')) { this.closest('form').submit(); }">
                                                         {{ __('Delete') }}
                                                     </x-dropdown-link>
                                                 </form>
