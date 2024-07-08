@@ -49,7 +49,7 @@ class FileSearchController extends Controller
             $files = File::onlyTrashed()->where([
                 ['parent_id', '=', $folder_id],
                 ['user_id', '=', auth()->id()],
-            ])->get();
+            ])->paginate(15);
         } else {
             $files = File::onlyTrashed()->where([
                 ['parent_id', '=', $folder_id],

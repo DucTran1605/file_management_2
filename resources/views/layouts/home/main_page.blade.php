@@ -10,11 +10,18 @@
                         <div class="flex items-center mb-4 sm:mb-0">
                             <form class="sm:pr-3" action="{{ route('file.search', ['parent_id' => $folder_id ?? '']) }}"
                                 method="GET">
-                                <label for="products-search" class="sr-only">Search</label>
+                                <label for="file-search" class="sr-only">Search</label>
                                 <div class="relative w-48 sm:w-64 xl:w-96">
                                     <input type="text" name="file_search" id="file-search"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        placeholder="Search in drive">
+                                        placeholder="Search in drive" value="{{ request('file_search') }}">
+                                    <button type="button" class="absolute inset-y-0 end-0 flex items-center pe-3" id="clear-search">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </form>
                             <!-- Settings Dropdown -->
@@ -125,7 +132,8 @@
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Upload File</h2>
                             </div>
                             <div class="p-4 border-t flex justify-end dark:border-gray-700">
-                                <button id="closeModalBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Close</button>
+                                <button id="closeModalBtn"
+                                    class="px-4 py-2 bg-red-600 text-white rounded-md">Close</button>
                             </div>
                         </div>
                     </div>
@@ -321,6 +329,11 @@
 
             alert("Copied share link: " + copyText.value);
         }
+
+        document.getElementById('clear-search').addEventListener('click', function() {
+            // Clear the search input field
+            document.getElementById('file-search').value = '';
+        });
     </script>
     @include('layouts.partials.modal')
 @endsection
