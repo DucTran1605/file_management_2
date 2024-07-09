@@ -15,6 +15,13 @@ class FileDetailController extends Controller
         return view('layouts.partials.modal', compact('fileDetail'));
     }
 
+    /**
+     * Change file name
+     *
+     * @param FileNameRequest $request
+     * @param [type] $id
+     * @return void
+     */
     public function changeFileName(FileNameRequest $request, $id)
     {
         $fileDetail = File::findOrFail($id);
