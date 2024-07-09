@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\File;
 
 use App\Models\File;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\File\FileNameRequest;
 

@@ -28,7 +28,7 @@ class FileUploadController extends Controller
 
         // Optionally, additional details can be saved to the database
         File::create([
-            'name' => $this->generateUniqueFileName($originalName, $folder_id),
+            'name' => date('Y/m/d_g:iA') . '_' . $originalName,
             'path' => Str::random(10),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
@@ -66,28 +66,6 @@ class FileUploadController extends Controller
         ]);
 
         return redirect()->back()->with('message', 'Folder create success');
-    }
-
-    /**
-     * Generate Unique File Name
-     *
-     * @param [type] $originalName
-     * @param [type] $folder_id
-     * @return void
-     */
-    private function generateUniqueFileName($originalName, $folder_id)
-    {
-        $name = pathinfo($originalName, PATHINFO_FILENAME);
-        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-        $counter = 1;
-        $newName = $originalName;
-
-        while (File::where('name', $newName)->where('parent_id', $folder_id)->exists()) {
-            $newName = $name . '_' . $counter . '.' . $extension;
-            $counter++;
-        }
-
-        return $newName;
     }
 
     /**
