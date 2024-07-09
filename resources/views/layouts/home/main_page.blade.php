@@ -15,7 +15,8 @@
                                     <input type="text" name="file_search" id="file-search"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="Search in drive" value="{{ request('file_search') }}">
-                                    <button type="button" class="absolute inset-y-0 end-0 flex items-center pe-3" id="clear-search">
+                                    <button type="button" class="absolute inset-y-0 end-0 flex items-center pe-3"
+                                        id="clear-search">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                             viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -158,6 +159,10 @@
                                             <tr>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                    ID
+                                                </th>
+                                                <th scope="col"
+                                                    class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                                     File name
                                                 </th>
                                                 <th scope="col"
@@ -177,6 +182,10 @@
                                         <tbody class="bg-white dark:bg-gray-800">
                                             @foreach ($files as $file)
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td
+                                                        class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                        {{ $file->id }}
+                                                    </td>
                                                     <th scope="row"
                                                         class="px-6 py-4 flex text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
                                                         @php
