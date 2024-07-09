@@ -226,7 +226,10 @@
                                                                         clip-rule="evenodd" />
                                                                 </svg>
                                                             @endif
-                                                            {{ $file->name }}
+                                                            <a href="#"
+                                                                onclick="showFileModal('{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
+                                                                {{ $file->name }}
+                                                            </a>
                                                         @else
                                                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
                                                                 width="24" height="24" fill="currentColor"
@@ -343,6 +346,32 @@
             // Clear the search input field
             document.getElementById('file-search').value = '';
         });
+
+        function showFileModal(fileUrl, fileExtension) {
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+            const modal = document.getElementById('fileModal');
+            const fileImage = document.getElementById('fileImage');
+            const fileMessage = document.getElementById('fileMessage');
+
+            if (imageExtensions.includes(fileExtension.toLowerCase())) {
+                fileImage.src = fileUrl;
+                fileImage.classList.remove('hidden');
+                fileImage.classList.add('overscroll-none');
+                fileMessage.textContent = '';
+            } else {
+                fileImage.src = '';
+                fileImage.classList.add('hidden');
+                fileMessage.textContent = 'Cannot show this file.';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeFileModal() {
+            const modal = document.getElementById('fileModal');
+            modal.classList.add('hidden');
+        }
     </script>
     @include('layouts.partials.modal')
+    @include('layouts.partials.fileImage_modal')
 @endsection

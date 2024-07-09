@@ -24,10 +24,11 @@ class FileUploadController extends Controller
         $uploadedFile = $request->file('file');
         $fileExtension = $uploadedFile->getClientOriginalExtension();
         $uploadName = Str::random(40) . '.' . $fileExtension;
+        $fileName = $uploadedFile->getClientOriginalName();
 
         // Optionally, additional details can be saved to the database
         $file = File::create([
-            'name' => $uploadedFile->getClientOriginalName(),
+            'name' => $fileName,
             'path' => Str::random(10),
             'size' => $uploadedFile->getSize(),
             'type' => 'file',
@@ -36,6 +37,8 @@ class FileUploadController extends Controller
             'user_id' => auth()->id(),
             'extension' => $fileExtension,
         ]);
+
+        $file->update(['name' => $file->id . "_" . $fileName]);
 
         //Upload file to s3 with uploadName
         Storage::disk('s3')->putFileAs('', $uploadedFile, $uploadName);

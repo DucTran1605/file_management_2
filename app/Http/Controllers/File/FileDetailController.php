@@ -8,7 +8,7 @@ use App\Http\Requests\File\FileNameRequest;
 
 class FileDetailController extends Controller
 {
-    public function showFileDetail($id)
+    public function showFileImage($id)
     {
         $fileDetail = File::findOrFail($id);
 
@@ -37,9 +37,9 @@ class FileDetailController extends Controller
         $fileDetail->update(['name' => $newName]);
 
         if ($fileDetail->type === 'folder') {
-            return back()->with('message', 'Folder name update success');
+            return back()->with('message', 'Folder name update success. Folder id: ' . $id);
         } else {
-            return back()->with('message', 'File name update success');
+            return back()->with('message', 'File name update success. File id: ' . $id);
         }
     }
 }
