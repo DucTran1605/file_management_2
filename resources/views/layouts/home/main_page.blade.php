@@ -226,8 +226,8 @@
                                                                         clip-rule="evenodd" />
                                                                 </svg>
                                                             @endif
-                                                            <a href="#"
-                                                                onclick="showFileModal('{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
+                                                            <a href="#" data-file-id={{ $file->id }}
+                                                                onclick="showFileModal(event, '{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
                                                                 {{ $file->name }}
                                                             </a>
                                                         @else
@@ -347,7 +347,16 @@
             document.getElementById('file-search').value = '';
         });
 
-        function showFileModal(fileUrl, fileExtension) {
+        function showFileModal(event, fileUrl, fileExtension) {
+            // Get the file ID from the data attribute
+            const fileId = event.currentTarget.getAttribute('data-file-id');
+
+            // Get the form element
+            const downloadForm = document.getElementById('downloadForm');
+
+            // Update the form's action attribute with the file download route
+            downloadForm.action = `{{ url('/file/download/') }}/${fileId}`;
+
             const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
             const modal = document.getElementById('fileModal');
             const fileImage = document.getElementById('fileImage');
@@ -356,12 +365,11 @@
             if (imageExtensions.includes(fileExtension.toLowerCase())) {
                 fileImage.src = fileUrl;
                 fileImage.classList.remove('hidden');
-                fileImage.classList.add('overscroll-none');
                 fileMessage.textContent = '';
             } else {
                 fileImage.src = '';
                 fileImage.classList.add('hidden');
-                fileMessage.textContent = 'Cannot show this file.';
+                fileMessage.textContent = 'Cannot preview this file.';
             }
 
             modal.classList.remove('hidden');
