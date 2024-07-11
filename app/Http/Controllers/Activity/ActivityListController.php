@@ -28,7 +28,7 @@ class ActivityListController extends Controller
 
         $fileMemories = File::where([
             ['user_id', '=', auth()->id()]
-        ]);
+        ])->get();
 
         foreach ($fileMemories as $fileMemory) {
             $memory += $fileMemory->size / 1024;
