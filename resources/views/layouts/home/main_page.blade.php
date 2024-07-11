@@ -226,7 +226,7 @@
                                                                         clip-rule="evenodd" />
                                                                 </svg>
                                                             @endif
-                                                            <a href="#" data-file-id={{ $file->id }}
+                                                            <a data-file-id={{ $file->id }}
                                                                 onclick="showFileModal(event, '{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
                                                                 {{ $file->name }}
                                                             </a>
@@ -329,6 +329,18 @@
         </div>
     </div>
     <script>
+        const openModalBtn = document.getElementById("openModalBtn");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const modalBackdrop = document.getElementById("modalBackdrop");
+
+        openModalBtn.addEventListener("click", () => {
+            modalBackdrop.classList.remove("hidden");
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+            modalBackdrop.classList.add("hidden");
+        });
+
         function copyToClipboard(id) {
             // Get the text field
             var copyText = document.getElementById(id);

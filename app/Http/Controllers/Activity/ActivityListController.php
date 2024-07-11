@@ -24,6 +24,14 @@ class ActivityListController extends Controller
             ['causer_id', '=', auth()->id()],
         ])->orderBy('created_at', 'desc')->paginate(15);
 
+        $memory = 0;
+
+        $fileMemories = File::all();
+
+        foreach ($fileMemories as $fileMemory) {
+            $memory += $fileMemory->size / 1024;
+        }
+
         // Count all entries with type 'file'
         $filesCount = File::where('type', '=', 'file')
             ->count();
@@ -32,6 +40,6 @@ class ActivityListController extends Controller
         $foldersCount = File::where('type', '=', 'folder')
             ->count();
 
-        return view('layouts.home.activity', compact('activities', 'filesCount', 'foldersCount'));
+        return view('layouts.home.activity', compact('activities', 'filesCount', 'foldersCount', 'memory'));
     }
 }
