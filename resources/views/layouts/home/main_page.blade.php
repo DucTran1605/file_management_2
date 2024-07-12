@@ -395,6 +395,7 @@
             const modal = document.getElementById('fileModal');
             const fileImage = document.getElementById('fileImage');
             const fileMessage = document.getElementById('fileMessage');
+            const fileMessageBox = document.getElementById('fileMessageBox');
 
             if (imageExtensions.includes(fileExtension.toLowerCase())) {
                 fileImage.src = fileUrl;
@@ -403,6 +404,7 @@
             } else {
                 fileImage.src = '';
                 fileImage.classList.add('hidden');
+                fileMessageBox.classList.remove('hidden');
                 fileMessage.textContent = 'Cannot preview this file.';
             }
 

@@ -34,7 +34,7 @@
             <div class="flex flex-col items-center justify-center p-4 md:p-5">
                 <img id="fileImage" class="hidden" alt="File Image" />
             </div>
-            <div class="flex flex-col items-center justify-center p-10 md:p-20">
+            <div id="fileMessageBox" class="hidden flex flex-col items-center justify-center p-10 md:p-20">
                 <div class="relative p-6 w-full max-w-3xl max-h-full">
                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 m-10">
                         <div class="p-6 md:p-10 text-center">
