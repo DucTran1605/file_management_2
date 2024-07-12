@@ -41,7 +41,7 @@ class FileUploadController extends Controller
         $file->update(['name' => $file->id . "_" . $fileName]);
 
         //Upload file to s3 with uploadName
-        Storage::disk('s3')->putFileAs('', $uploadedFile, $uploadName);
+        Storage::putFileAs('', $uploadedFile, $uploadName);
 
         // Get the ID of the newly created file
         $fileId = $file->id;
@@ -61,7 +61,7 @@ class FileUploadController extends Controller
         $originalName = $request->folder_name;
 
         File::create([
-            'name' => $$originalName,
+            'name' => $originalName,
             'path' => Str::random(10),
             'size' => "",
             'type' => 'folder',
