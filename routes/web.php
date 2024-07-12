@@ -1,19 +1,19 @@
 <?php
 
-use App\Http\Controllers\Activity\ActivityListController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\File;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\File\FileListController;
+use App\Http\Controllers\File\FileShareController;
 use App\Http\Controllers\File\FileDeleteController;
 use App\Http\Controllers\File\FileDetailController;
-use App\Http\Controllers\File\FileDownloadController;
-use App\Http\Controllers\File\FileListController;
 use App\Http\Controllers\File\FileMovingController;
 use App\Http\Controllers\File\FileSearchController;
-use App\Http\Controllers\File\FileShareController;
 use App\Http\Controllers\File\FileUploadController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-
-Route::get('/', [AuthenticatedSessionController::class, 'store']);
+use App\Http\Controllers\File\FileDownloadController;
+use App\Http\Controllers\Activity\ActivityListController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

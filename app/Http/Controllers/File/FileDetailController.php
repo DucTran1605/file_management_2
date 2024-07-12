@@ -3,20 +3,25 @@
 namespace App\Http\Controllers\File;
 
 use App\Models\File;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\File\FileNameRequest;
 
 class FileDetailController extends Controller
 {
-    public function showFileDetail($id)
+    public function showFileImage($id)
     {
         $fileDetail = File::findOrFail($id);
 
         return view('layouts.partials.modal', compact('fileDetail'));
     }
 
+    /**
+     * Change file name
+     *
+     * @param FileNameRequest $request
+     * @param [type] $id
+     * @return void
+     */
     public function changeFileName(FileNameRequest $request, $id)
     {
         $fileDetail = File::findOrFail($id);
@@ -32,9 +37,9 @@ class FileDetailController extends Controller
         $fileDetail->update(['name' => $newName]);
 
         if ($fileDetail->type === 'folder') {
-            return back()->with('message', 'Folder name update success');
+            return back()->with('message', 'Folder name update success. Folder id: ' . $id);
         } else {
-            return back()->with('message', 'File name update success');
+            return back()->with('message', 'File name update success. File id: ' . $id);
         }
     }
 }

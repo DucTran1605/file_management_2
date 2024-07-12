@@ -4,8 +4,7 @@
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
         <ul class="space-y-2 font-medium">
             <li>
-                <a href="{{ route('activity.show') }}"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('activity.show') ? 'dark:bg-gray-700' : '' }} ">
+                <x-nav-link href="{{ route('activity.show') }}" :active="request()->routeIs('activity.show')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         viewBox="0 0 24 24">
                         <path fill-rule="evenodd"
@@ -13,11 +12,10 @@
                             clip-rule="evenodd" />
                     </svg>
                     <span class="ms-3">Home Page</span>
-                </a>
+                </x-nav-link>
             </li>
             <li>
-                <a href="{{ route('file.show') }}"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('file.show') ? 'dark:bg-gray-700' : '' }}">
+                <x-nav-link href="{{ route('file.show') }}" :active="request()->routeIs('file.show')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         viewBox="0 0 24 24">
                         <path fill-rule="evenodd"
@@ -25,11 +23,10 @@
                             clip-rule="evenodd" />
                     </svg>
                     <span class="ms-3">My Drive</span>
-                </a>
+                </x-nav-link>
             </li>
             <li>
-                <a href="{{ route('file.trashed') }}"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('file.trashed') ? 'dark:bg-gray-700' : '' }}">
+                <x-nav-link href="{{ route('file.trashed') }}" :active="request()->routeIs('file.trashed')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         viewBox="0 0 24 24">
                         <path fill-rule="evenodd"
@@ -37,7 +34,7 @@
                             clip-rule="evenodd" />
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Trash</span>
-                </a>
+                </x-nav-link>
             </li>
         </ul>
     </div>
