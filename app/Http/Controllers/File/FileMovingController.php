@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\File;
 
 use App\Models\File;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -65,67 +65,65 @@ class FileMovingController extends Controller
 
             return redirect()->back();
         } else if (session('copied_file_id')) {
-            $parent_id = $folder_id;
-
-            // Retrieve the copied file ID from the session
+            // Get the copied file ID from the session
             $copiedFileId = session('copied_file_id');
+
             if (!$copiedFileId) {
-                return redirect()->back()->with('errors', 'No Copied file');
+                return redirect()->back()->with('error', 'No file to paste.');
             }
 
-            // Retrieve copied file
-            $file = File::findOrFail($copiedFileId);
+            // Retrieve the copied file
+            $file = File::find($copiedFileId);
 
-            // Make a file copy record from the database
-            $copiedFile = $file->replicate();
-            $copiedFile->name = $file->name . '-copy';
-            $copiedFile->parent_id = $parent_id;
-            $copiedFile->uploadName = $this->generateCopyFileName($file->uploadName); // Generate a new unique upload name
-            $copiedFile->save();
+            if (!$file) {
+                return redirect()->back()->with('error', 'File not found.');
+            }
 
-            //Upload file to s3 with uploadName
-            Storage::copy('' . $file->uploadName, '' . $copiedFile->uploadName);
+            // Create a new copy of the file or folder
+            $newFile = $file->replicate();
+            $newFile->name = "copy_" . $file->name;
+            $newFile->parent_id = $folder_id;
+            $newFile->uploadName = Str::random(40) . '.' . $newFile->extension;
+            $newFile->save();
 
-            // Paste all subfiles
-            $this->pasteSubFiles($file, $copiedFile->id);
+            if ($file->type === 'folder') {
+                // Recursively copy subfolders and files
+                $this->copyChildren($file->id, $newFile->id);
+            } else {
+                Storage::copy($file->uploadName, $newFile->uploadname);
+            }
 
+            // Clear the copied file ID from session
             session()->forget('copied_file_id');
 
-            return redirect()->back()->with('message', 'Paste file successful');
+            return redirect()->back()->with('success', 'File pasted successfully.');
         }
     }
 
     /**
-     * generate name for copy file
+     * Copy sub file and folder
      *
-     * @param mixed $originalUploadName
-     * @return string
-     */
-    private function generateCopyFileName($originalUploadName)
-    {
-        $pathInfo = pathinfo($originalUploadName);
-        return $pathInfo['filename'] . '-copy.' . $pathInfo['extension'];
-    }
-
-    /**
-     * Paste a sub file in folder
-     *
-     * @param mixed $originalFile
+     * @param mixed $oldParentId
      * @param mixed $newParentId
      * @return void
      */
-    private function pasteSubFiles($originalFile, $newParentId)
+    protected function copyChildren($oldParentId, $newParentId)
     {
-        // Paste all subfiles
-        foreach ($originalFile->children as $childFile) {
-            // Make a subfile copy record from the database
-            $copiedSubfile = $childFile->replicate();
-            $copiedSubfile->parent_id = $newParentId;
-            $copiedSubfile->uploadName = $this->generateCopyFileName($childFile->uploadName); // Generate a new unique upload name
-            $copiedSubfile->save();
+        $children = File::where('parent_id', $oldParentId)->get();
 
-            // Recursively paste subfiles
-            $this->pasteSubFiles($childFile, $copiedSubfile->id);
+        foreach ($children as $child) {
+            $newChild = $child->replicate();
+            $newChild->name = "copy_" . $child->name;
+            $newChild->parent_id = $newParentId;
+            $newChild->uploadName = Str::random(40) . '.' . $newChild->extension;
+            $newChild->save();
+
+            if ($newChild->type === 'folder') {
+                // Recursively copy subfolders and files
+                $this->copyChildren($child->id, $newChild->id);
+            } else {
+                Storage::copy($child->uploadName, $newChild->uploadName);
+            }
         }
     }
 }
