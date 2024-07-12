@@ -46,6 +46,10 @@
                                             <tr>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                    ID
+                                                </th>
+                                                <th scope="col"
+                                                    class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                                     File name
                                                 </th>
                                                 <th scope="col"
@@ -65,6 +69,10 @@
                                         <tbody class="bg-white dark:bg-gray-800">
                                             @foreach ($files as $file)
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td
+                                                        class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                        {{ $file->id }}
+                                                    </td>
                                                     <th scope="row"
                                                         class="px-6 py-4 flex text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
                                                         @php

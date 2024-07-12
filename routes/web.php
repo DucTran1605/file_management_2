@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/file/{id}/detail', [FileDetailController::class, 'showFileDetail'])->name('file.detail');
     Route::put('/fileEdit/{id}', [FileDetailController::class, 'changeFileName'])->name('file.edit');
     Route::post('/file/{id}/cut', [FileMovingController::class, 'fileCut'])->name('file.cut');
+    Route::post('/file/{id}/copy', [FileMovingController::class, 'fileCopy'])->name('file.copy');
     Route::post('/filePaste/{parent_id?}', [FileMovingController::class, 'filePaste'])->name('file.paste');
     Route::get('/fileSearch/{parent_id?}', [FileSearchController::class, 'fileSearch'])->name('file.search');
     Route::get('/fileTrashSearch/{parent_id?}', [FileSearchController::class, 'fileTrashSearch'])->name('fileTrash.search');

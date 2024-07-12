@@ -63,6 +63,25 @@
                                         </button>
                                     </x-slot>
                                 </x-dropdown>
+                                @if (session()->has('cuted_file_id'))
+                                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}"
+                                        method="POST">
+                                        @csrf
+                                        <input type="hidden" value="null" name="parent_id">
+                                        <td><button
+                                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
+                                        </td>
+                                    </form>
+                                @elseif (session()->has('copied_file_id'))
+                                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}"
+                                        method="POST">
+                                        @csrf
+                                        <input type="hidden" value="null" name="parent_id">
+                                        <td><button
+                                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
+                                        </td>
+                                    </form>
+                                @endif
                                 <!-- Modal Background (Hidden by Default) -->
                                 <div id="modalBackdrop"
                                     class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
@@ -138,15 +157,6 @@
                             </div>
                         </div>
                     </div>
-                    @if (session()->has('cuted_file_id'))
-                        <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}" method="POST">
-                            @csrf
-                            <input type="hidden" value="null" name="parent_id">
-                            <td><button
-                                    class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
-                            </td>
-                        </form>
-                    @endif
                 </div>
                 <!-- Table -->
                 <div class="flex flex-col mt-6">
@@ -231,14 +241,16 @@
                                                                 {{ $file->name }}
                                                             </a>
                                                         @else
-                                                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
-                                                                width="24" height="24" fill="currentColor"
-                                                                viewBox="0 0 24 24">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                            {{ $file->name }}
+                                                            <a href="{{ route('folder.show', $file->id) }}"
+                                                                class="flex items-center"><svg class="mr-2"
+                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" fill="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                                {{ $file->name }}</a>
                                                         @endif
                                                     </th>
                                                     <td
@@ -292,6 +304,16 @@
                                                                             onclick="event.preventDefault();
                                                                 this.closest('form').submit();">
                                                                             {{ __('Cut') }}
+                                                                        </x-dropdown-link>
+                                                                    </form>
+
+                                                                    <form method="POST"
+                                                                        action="{{ route('file.copy', $file->id) }}">
+                                                                        @csrf
+                                                                        <x-dropdown-link :href="route('file.copy', $file->id)"
+                                                                            onclick="event.preventDefault();
+                                                                this.closest('form').submit();">
+                                                                            {{ __('Copy') }}
                                                                         </x-dropdown-link>
                                                                     </form>
 
@@ -373,6 +395,7 @@
             const modal = document.getElementById('fileModal');
             const fileImage = document.getElementById('fileImage');
             const fileMessage = document.getElementById('fileMessage');
+            const fileMessageBox = document.getElementById('fileMessageBox');
 
             if (imageExtensions.includes(fileExtension.toLowerCase())) {
                 fileImage.src = fileUrl;
@@ -381,6 +404,7 @@
             } else {
                 fileImage.src = '';
                 fileImage.classList.add('hidden');
+                fileMessageBox.classList.remove('hidden');
                 fileMessage.textContent = 'Cannot preview this file.';
             }
 
