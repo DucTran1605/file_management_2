@@ -409,7 +409,6 @@
             if (imageExtensions.includes(fileExtension.toLowerCase())) {
                 fileImage.src = fileUrl;
                 fileImage.classList.remove('hidden');
-                fileMessage.textContent = '';
             } else {
                 fileImage.src = '';
                 fileImage.classList.add('hidden');
