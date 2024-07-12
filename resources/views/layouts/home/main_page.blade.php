@@ -63,6 +63,25 @@
                                         </button>
                                     </x-slot>
                                 </x-dropdown>
+                                @if (session()->has('cuted_file_id'))
+                                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}"
+                                        method="POST">
+                                        @csrf
+                                        <input type="hidden" value="null" name="parent_id">
+                                        <td><button
+                                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
+                                        </td>
+                                    </form>
+                                @elseif (session()->has('copied_file_id'))
+                                    <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}"
+                                        method="POST">
+                                        @csrf
+                                        <input type="hidden" value="null" name="parent_id">
+                                        <td><button
+                                                class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
+                                        </td>
+                                    </form>
+                                @endif
                                 <!-- Modal Background (Hidden by Default) -->
                                 <div id="modalBackdrop"
                                     class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50">
@@ -138,23 +157,6 @@
                             </div>
                         </div>
                     </div>
-                    @if (session()->has('cuted_file_id'))
-                        <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}" method="POST">
-                            @csrf
-                            <input type="hidden" value="null" name="parent_id">
-                            <td><button
-                                    class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
-                            </td>
-                        </form>
-                    @elseif (session()->has('copied_file_id'))
-                        <form action="{{ route('file.paste', ['parent_id' => $folder_id ?? '']) }}" method="POST">
-                            @csrf
-                            <input type="hidden" value="null" name="parent_id">
-                            <td><button
-                                    class="ml-3 mt-2 text-black bg-white hover:bg-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 me-2 mb-2 dark:bg-white dark:hover:bg-white focus:outline-none dark:focus:ring-white">Paste</button>
-                            </td>
-                        </form>
-                    @endif
                 </div>
                 <!-- Table -->
                 <div class="flex flex-col mt-6">
