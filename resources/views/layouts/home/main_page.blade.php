@@ -334,7 +334,7 @@
                                                                     <x-dropdown-link>
                                                                         <input type="text" class="hidden"
                                                                             id="copy_{{ $file->id }}"
-                                                                            value="fileShare/{{ $file->path }}">
+                                                                            value="{{ url('fileShare/'.$file->path) }}">
                                                                         <button value="copy"
                                                                             onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Share file') }}</button>
                                                                     </x-dropdown-link>

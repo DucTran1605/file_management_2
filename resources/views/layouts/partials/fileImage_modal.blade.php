@@ -36,9 +36,21 @@
             </div>
             <div id="fileMessageBox" class="hidden flex flex-col items-center justify-center p-10 md:p-20">
                 <div class="relative p-6 w-full max-w-3xl max-h-full">
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 m-10">
-                        <div class="p-6 md:p-10 text-center">
-                            <p id="fileMessage" class="text-base text-center text-gray-500 dark:text-gray-400"></p>
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 m-10 text-center">
+                        <div class="p-4 md:p-5 space-y-4">
+                            <h3 id="fileMessage" class="text-xl font-semibold text-gray-900 dark:text-white">
+                            </h3>
+                        </div>
+                        <!-- Modal footer -->
+                        <div
+                            class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                            <form id="downloadForm" method="get">
+                                <!-- The action attribute will be modified via JavaScript -->
+                                <button type="submit"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Download
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
