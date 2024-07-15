@@ -15,10 +15,14 @@ class FileListController extends Controller
      */
     public function listAllFile()
     {
-        $files = File::where([
-            ['user_id', '=', auth()->id()],
-            ['parent_id', '=', null]
-        ])->paginate(15);
+        $userId = auth()->id();
+
+        $files = File::where(function ($query) use ($userId) {
+            $query->where('user_id', $userId)
+                ->whereNull('parent_id');
+        })->orWhere(function ($query) use ($userId) {
+            $query->where('shared_with', $userId);
+        })->paginate(15);
         return view('layouts.home.main_page', compact('files'));
     }
 
