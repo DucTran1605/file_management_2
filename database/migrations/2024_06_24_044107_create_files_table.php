@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('type');
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('parent_id')->nullable()->constrained('files')->cascadeOnDelete();
+            $table->string('uploadName');
+            $table->string('extension');
             $table->timestamps();
             $table->softDeletes();
         });

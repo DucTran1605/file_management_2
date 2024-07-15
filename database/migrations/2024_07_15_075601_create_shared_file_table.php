@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            $table->string('uploadName');
-            $table->string('extension');
+        Schema::create('shared_file', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('file_id')->nullable()->constrained('files')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -22,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('shared_file');
     }
 };
