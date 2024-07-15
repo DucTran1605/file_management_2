@@ -26,9 +26,12 @@ class File extends Model
         'shared_with',
     ];
 
+    /**
+     * Get the users that the file is shared with.
+     */
     public function sharedFiles()
     {
-        return $this->hasMany(SharedFile::class);
+        return $this->belongsToMany(User::class, 'file_shared', 'file_id');
     }
     /**
      * Get the parent folder of the file.

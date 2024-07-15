@@ -9,6 +9,8 @@ class FileShared extends Model
 {
     use HasFactory;
 
+    protected $table = 'file_shared';
+
     /**
      * The attributes that are mass assignable.
      *

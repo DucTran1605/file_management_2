@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\File;
 
 use App\Models\File;
+use App\Models\User;
 use App\Models\SharedFile;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class FileListController extends Controller
@@ -16,38 +18,11 @@ class FileListController extends Controller
      */
     public function listAllFile()
     {
-        $userId = auth()->id();
-
-        // Retrieve the user's own files
-        $ownFiles = File::where(function ($query) use ($userId) {
-            $query->where('user_id', $userId)
-                ->whereNull('parent_id');
-        })->get();
-
-        // Retrieve files shared with the user
-        $sharedFiles = SharedFile::with('file')
-            ->where('user_id', $userId)
-            ->get()
-            ->map(function ($sharedFile) {
-                return $sharedFile->file;
-            });
-
-        // Merge the collections
-        $allFiles = $ownFiles->merge($sharedFiles);
-
-        // Get current page form url e.g. &page=6
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-        // Define the number of items per page
-        $perPage = 15;
-
-        // Slice the collection to get the items to display in current page
-        $currentItems = $allFiles->slice(($currentPage - 1) * $perPage, $perPage)->all();
-
-        // Create LengthAwarePaginator instance
-        $paginatedItems = new LengthAwarePaginator($currentItems, $allFiles->count(), $perPage);
-
-        return view('layouts.home.main_page', ['files' => $paginatedItems]);
+        $files = File::where([
+            ['user_id', '=', auth()->id()],
+            ['parent_id', '=', null]
+        ])->paginate(15);
+        return view('layouts.home.main_page', compact('files'));
     }
 
     /**
