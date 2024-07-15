@@ -26,21 +26,10 @@ class File extends Model
         'shared_with',
     ];
 
-    /**
-     * Get user who share file
-     */
-    public function user()
+    public function sharedFiles()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(SharedFile::class);
     }
-    /**
-     * Get user that file will shared with
-     */
-    public function sharedWithUser()
-    {
-        return $this->belongsTo(User::class, 'shared_with');
-    }
-
     /**
      * Get the parent folder of the file.
      */
@@ -55,7 +44,6 @@ class File extends Model
     {
         return $this->hasMany(File::class, 'parent_id');
     }
-
     /**
      * Recursively delete all child files and folders.
      */
