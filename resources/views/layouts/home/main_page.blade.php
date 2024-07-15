@@ -111,21 +111,19 @@
                                 </div>
                             </div>
                             <!-- Error Messages -->
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    <div class="ml-2 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-                                        role="alert">
-                                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                        </svg>
-                                        <span class="sr-only">Info</span>
-                                        <div>
-                                            <span class="font-medium">Danger alert!</span> {{ $error }}
-                                        </div>
+                            @if (session()->has('error'))
+                                <div class="flex items-center p-4 ml-1 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+                                    role="alert">
+                                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                    </svg>
+                                    <span class="sr-only">Info</span>
+                                    <div>
+                                        <span class="font-medium">Danger alert!</span> {{ session()->get('error') }}
                                     </div>
-                                @endforeach
+                                </div>
                             @endif
                             @if (session()->has('message'))
                                 <div class="flex items-center p-4 ml-1 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
@@ -237,8 +235,8 @@
                                                                         clip-rule="evenodd" />
                                                                 </svg>
                                                             @elseif (in_array($fileExtension, $specialExtensions))
-                                                                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" fill="currentColor"
+                                                                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24" height="24" fill="currentColor"
                                                                     viewBox="0 0 24 24">
                                                                     <path fill-rule="evenodd"
                                                                         d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm3 2h2.01v2.01h-2V8h2v2.01h-2V12h2v2.01h-2V16h2v2.01h-2v2H12V18h2v-1.99h-2V14h2v-1.99h-2V10h2V8.01h-2V6h2V4Z"
@@ -334,7 +332,7 @@
                                                                     <x-dropdown-link>
                                                                         <input type="text" class="hidden"
                                                                             id="copy_{{ $file->id }}"
-                                                                            value="{{ url('fileShare/'.$file->path) }}">
+                                                                            value="{{ url('fileShare/' . $file->path) }}">
                                                                         <button value="copy"
                                                                             onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Share file') }}</button>
                                                                     </x-dropdown-link>
