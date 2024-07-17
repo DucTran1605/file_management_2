@@ -58,7 +58,7 @@
                                                 </th>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                                    Uploaded
+                                                    Deleted at
                                                 </th>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
@@ -135,7 +135,7 @@
                                                     </td>
                                                     <td
                                                         class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
-                                                        {{ $file->created_at->diffForHumans() }}
+                                                        {{ $file->deleted_at }}
                                                     </td>
                                                     <td
                                                         class="absolute mt-3 p-1 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
