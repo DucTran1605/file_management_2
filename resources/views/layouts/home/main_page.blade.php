@@ -25,6 +25,15 @@
                                     </button>
                                 </div>
                             </form>
+                            <a href="#" id="deletedAllSelected"
+                                class="mr-3 nline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </a>
                             <!-- Settings Dropdown -->
                             <div class="hidden sm:flex sm:items-center sm:ms-1">
                                 <x-dropdown align="right" width="48">
@@ -165,6 +174,14 @@
                                     <table class="w-full max-w-full divide-y divide-gray-200 dark:divide-gray-600">
                                         <thead class="bg-gray-50 dark:bg-gray-700">
                                             <tr>
+                                                <th scope="col" class="p-4">
+                                                    <div class="flex items-center">
+                                                        <input id="checkbox_all" aria-describedby="checkbox-1"
+                                                            type="checkbox"
+                                                            class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </th>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                                     ID
@@ -190,6 +207,15 @@
                                         <tbody class="bg-white dark:bg-gray-800">
                                             @foreach ($files as $file)
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td class="w-4 p-4">
+                                                        <div class="flex items-center">
+                                                            <input id="checkbox_id" aria-describedby="checkbox-1"
+                                                                name="ids" type="checkbox"
+                                                                value="{{ $file->id }}"
+                                                                class="checkbox_item w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                                            <label for="" class="sr-only">checkbox</label>
+                                                        </div>
+                                                    </td>
                                                     <td
                                                         class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                                         {{ $file->id }}
@@ -435,6 +461,13 @@
             const modal = document.getElementById('fileModal');
             modal.classList.add('hidden');
         }
+
+        document.getElementById('checkbox_all').addEventListener('click', function(event) {
+            let checkboxes = document.querySelectorAll('.checkbox_item');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = event.target.checked;
+            });
+        });
     </script>
     @include('layouts.partials.modal')
     @include('layouts.partials.fileImage_modal')
