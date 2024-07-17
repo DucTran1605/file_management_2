@@ -252,10 +252,15 @@
                                                                         clip-rule="evenodd" />
                                                                 </svg>
                                                             @endif
-                                                            <a data-file-id={{ $file->id }}
-                                                                onclick="showFileModal(event, '{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
-                                                                {{ $file->name }}
-                                                            </a>
+                                                            @if (in_array($fileExtension, $imageExtensions))
+                                                                <a data-file-id={{ $file->id }}
+                                                                    onclick="showFileModal(event, '{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
+                                                                    {{ $file->name }}
+                                                                </a>
+                                                            @elseif (in_array($fileExtension, $pdfExtensions))
+                                                                <a
+                                                                    href="{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}">{{ $file->name }}</a>
+                                                            @endif
                                                         @else
                                                             <a href="{{ route('folder.show', $file->id) }}"
                                                                 class="flex items-center"><svg class="mr-2"
