@@ -23,14 +23,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the files that are shared with the user.
-     */
-    public function sharedWithUsers()
-    {
-        return $this->belongsToMany(File::class, 'file_shared', 'user_id');
-    }
-
-    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>

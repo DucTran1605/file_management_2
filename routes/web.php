@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\File;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ProfileController;
@@ -49,4 +50,8 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::get('/test', function () {
+    $file = File::with('sharedFiles')->first();
+    $user = User::with('sharedWithUsers')->first();
+
+    return $file;
 })->name('test');

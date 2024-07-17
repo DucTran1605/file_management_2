@@ -22,6 +22,7 @@ class FileListController extends Controller
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', null]
         ])->paginate(15);
+
         return view('layouts.home.main_page', compact('files'));
     }
 
