@@ -93,10 +93,10 @@
                                                                 ];
                                                                 $pdfExtensions = ['pdf'];
                                                                 $specialExtensions = ['zip', 'rar'];
-                                                                $fileExtension = $file->extension;
+                                                                $fileExtension = $activity->subject->extension;
                                                             @endphp
                                                             @if ($activity->subject->type == 'file')
-                                                                @if (in_array($fileExtension, $imageExtensions))
+                                                                @if (in_array($fileExtension, $imageExtensions)) 
                                                                     <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
                                                                         width="24" height="24" fill="currentColor"
                                                                         viewBox="0 0 24 24">
