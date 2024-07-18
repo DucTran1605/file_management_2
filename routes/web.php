@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/fileTrashSearch/{parent_id?}', [FileSearchController::class, 'fileTrashSearch'])->name('fileTrash.search');
     Route::get('/file/download/{id}', [FileDownloadController::class, 'downloadFolder'])->name('file.download');
     Route::get('/fileShare/{url}', [FileShareController::class, 'shareFile'])->name('file.share');
+    Route::post('/delete-selected', [FileDeleteController::class, 'deleteSelected'])->name('delete.selected');
 
     //Route for Folder
     Route::post('/folder/{parent_id?}', [FileUploadController::class, 'createFolder'])->name('folder.create');

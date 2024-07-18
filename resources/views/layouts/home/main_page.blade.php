@@ -176,8 +176,8 @@
                                             <tr>
                                                 <th scope="col" class="p-4">
                                                     <div class="flex items-center">
-                                                        <input id="checkbox_all" aria-describedby="checkbox-1"
-                                                            type="checkbox"
+                                                        <input name="ids" id="checkbox_all"
+                                                            aria-describedby="checkbox-1" type="checkbox"
                                                             class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
                                                         <label for="checkbox-all" class="sr-only">checkbox</label>
                                                     </div>
@@ -467,6 +467,45 @@
             checkboxes.forEach(checkbox => {
                 checkbox.checked = event.target.checked;
             });
+        });
+
+        document.getElementById('deletedAllSelected').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            if (!confirm('Are you sure you want to delete the selected items?')) {
+                return;
+            }
+
+            let selectedIds = [];
+            let checkboxes = document.querySelectorAll('.checkbox_item:checked');
+
+            checkboxes.forEach(checkbox => {
+                selectedIds.push(checkbox.value);
+            });
+
+            if (selectedIds.length > 0) {
+                fetch('/delete-selected', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            ids: selectedIds
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert('An error occurred while deleting the items.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                alert('No items were selected.');
+            }
         });
     </script>
     @include('layouts.partials.modal')
