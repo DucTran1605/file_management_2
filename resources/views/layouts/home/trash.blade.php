@@ -16,6 +16,14 @@
                                     <input type="text" name="file_search" id="file-search"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="Search in drive">
+                                    <button type="button" class="absolute inset-y-0 end-0 flex items-center pe-3"
+                                        id="clear-search">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </form>
                             @if (session()->has('message'))
@@ -224,6 +232,11 @@
 
             alert("Copied share link: " + copyText.value);
         }
+
+        document.getElementById('clear-search').addEventListener('click', function() {
+            // Clear the search input field
+            document.getElementById('file-search').value = '';
+        });
     </script>
     @include('layouts.partials.modal')
 @endsection
