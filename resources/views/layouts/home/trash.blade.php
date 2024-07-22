@@ -16,6 +16,14 @@
                                     <input type="text" name="file_search" id="file-search"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="Search in drive">
+                                    <button type="button" class="absolute inset-y-0 end-0 flex items-center pe-3"
+                                        id="clear-search">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </form>
                             @if (session()->has('message'))
@@ -58,7 +66,7 @@
                                                 </th>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                                    Uploaded
+                                                    Deleted at
                                                 </th>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
@@ -93,6 +101,8 @@
                                                                 'xml',
                                                                 'html',
                                                             ];
+                                                            $pdfExtensions = ['pdf'];
+                                                            $specialExtensions = ['zip', 'rar'];
                                                             $fileExtension = $file->extension;
                                                         @endphp
                                                         @if ($file->type == 'file')
@@ -110,6 +120,22 @@
                                                                     viewBox="0 0 24 24">
                                                                     <path fill-rule="evenodd"
                                                                         d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            @elseif (in_array($fileExtension, $specialExtensions))
+                                                                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24" height="24" fill="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm3 2h2.01v2.01h-2V8h2v2.01h-2V12h2v2.01h-2V16h2v2.01h-2v2H12V18h2v-1.99h-2V14h2v-1.99h-2V10h2V8.01h-2V6h2V4Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            @elseif (in_array($fileExtension, $pdfExtensions))
+                                                                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24" height="24" fill="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2 2h12a2 2 0 0 0 2-2 2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V4a2 2 0 0 0-2-2h-7Zm-6 9a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h.5a2.5 2.5 0 0 0 0-5H5Zm1.5 3H6v-1h.5a.5.5 0 0 1 0 1Zm4.5-3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1.376A2.626 2.626 0 0 0 15 15.375v-1.75A2.626 2.626 0 0 0 12.375 11H11Zm1 5v-3h.375a.626.626 0 0 1 .625.626v1.748a.625.625 0 0 1-.626.626H12Zm5-5a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1h1a1 1 0 1 0 0-2h-2Z"
                                                                         clip-rule="evenodd" />
                                                                 </svg>
                                                             @endif
@@ -135,7 +161,7 @@
                                                     </td>
                                                     <td
                                                         class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
-                                                        {{ $file->created_at->diffForHumans() }}
+                                                        {{ $file->deleted_at }}
                                                     </td>
                                                     <td
                                                         class="absolute mt-3 p-1 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
@@ -146,10 +172,11 @@
                                                                     <button>
                                                                         <div class="ms-1">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                width="24" height="24" fill="none"
-                                                                                viewBox="0 0 24 24">
+                                                                                width="24" height="24"
+                                                                                fill="none" viewBox="0 0 24 24">
                                                                                 <path stroke="currentColor"
-                                                                                    stroke-linecap="round" stroke-width="3"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-width="3"
                                                                                     d="M12 6h.01M12 12h.01M12 18h.01" />
                                                                             </svg>
                                                                         </div>
@@ -205,6 +232,11 @@
 
             alert("Copied share link: " + copyText.value);
         }
+
+        document.getElementById('clear-search').addEventListener('click', function() {
+            // Clear the search input field
+            document.getElementById('file-search').value = '';
+        });
     </script>
     @include('layouts.partials.modal')
 @endsection

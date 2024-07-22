@@ -39,7 +39,6 @@ class File extends Model
     {
         return $this->hasMany(File::class, 'parent_id');
     }
-
     /**
      * Recursively delete all child files and folders.
      */

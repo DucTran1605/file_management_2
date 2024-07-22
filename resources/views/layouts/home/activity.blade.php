@@ -27,10 +27,12 @@
                         <h3 class="mb-2 text-base font-normal text-gray-500 dark:text-gray-400">Memory usage</h3>
                         @if ($memory < 1024)
                             <span
-                                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ number_format($memory) }} KB</span>
+                                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ number_format($memory) }}
+                                KB</span>
                         @else
                             <span
-                                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ number_format($memory) }} GB</span>
+                                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ number_format($memory) }}
+                                GB</span>
                         @endif
                     </div>
                     <div id="traffic-channels-chart" class="w-full"></div>
@@ -89,10 +91,12 @@
                                                                     'xml',
                                                                     'html',
                                                                 ];
+                                                                $pdfExtensions = ['pdf'];
+                                                                $specialExtensions = ['zip', 'rar'];
                                                                 $fileExtension = $activity->subject->extension;
                                                             @endphp
                                                             @if ($activity->subject->type == 'file')
-                                                                @if (in_array($fileExtension, $imageExtensions))
+                                                                @if (in_array($fileExtension, $imageExtensions)) 
                                                                     <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
                                                                         width="24" height="24" fill="currentColor"
                                                                         viewBox="0 0 24 24">
@@ -106,6 +110,22 @@
                                                                         viewBox="0 0 24 24">
                                                                         <path fill-rule="evenodd"
                                                                             d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                                            clip-rule="evenodd" />
+                                                                    </svg>
+                                                                @elseif (in_array($fileExtension, $specialExtensions))
+                                                                    <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                        width="24" height="24" fill="currentColor"
+                                                                        viewBox="0 0 24 24">
+                                                                        <path fill-rule="evenodd"
+                                                                            d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm3 2h2.01v2.01h-2V8h2v2.01h-2V12h2v2.01h-2V16h2v2.01h-2v2H12V18h2v-1.99h-2V14h2v-1.99h-2V10h2V8.01h-2V6h2V4Z"
+                                                                            clip-rule="evenodd" />
+                                                                    </svg>
+                                                                @elseif (in_array($fileExtension, $pdfExtensions))
+                                                                    <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                        width="24" height="24" fill="currentColor"
+                                                                        viewBox="0 0 24 24">
+                                                                        <path fill-rule="evenodd"
+                                                                            d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2 2h12a2 2 0 0 0 2-2 2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V4a2 2 0 0 0-2-2h-7Zm-6 9a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h.5a2.5 2.5 0 0 0 0-5H5Zm1.5 3H6v-1h.5a.5.5 0 0 1 0 1Zm4.5-3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1.376A2.626 2.626 0 0 0 15 15.375v-1.75A2.626 2.626 0 0 0 12.375 11H11Zm1 5v-3h.375a.626.626 0 0 1 .625.626v1.748a.625.625 0 0 1-.626.626H12Zm5-5a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1h1a1 1 0 1 0 0-2h-2Z"
                                                                             clip-rule="evenodd" />
                                                                     </svg>
                                                                 @endif

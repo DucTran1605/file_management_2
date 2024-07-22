@@ -2,39 +2,38 @@
 
 namespace App\Http\Controllers\File;
 
-use ZipArchive;
 use App\Models\File;
-use Illuminate\Http\Request;
+use App\Models\FileShared;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\File\FileMovingController;
 
 class FileShareController extends Controller
 {
+
     public function shareFile($url)
     {
-        $fileShare = File::where('path', $url)->first();
-        $fileShareId = $fileShare->id;
-        $fileDownload = new FileDownloadController();
+        $fileMovingController = new FileMovingController();
 
-        // Find the file/folder
-        $file = File::find($fileShareId);
+        $file = File::where([
+            ['path', '=', $url]
+        ])->first();
 
-        if (!$file) {
-            return response()->json(['error' => 'File or folder not found'], 404);
-        }
+        // Create a new copy of the file or folder
+        $newFile = $file->replicate();
+        $newFile->user_id = auth()->id();
+        $newFile->parent_id = null; // Set parent_id to null
+        $newFile->uploadName = Str::random(40) . '.' . $newFile->extension;
+        $newFile->save();
 
-        // Set ZIP file name
-        $zipFileName = $file->name . '.zip';
-        $zip = new ZipArchive;
-        $filePath = tempnam(sys_get_temp_dir(), $zipFileName);
-
-        if ($zip->open($filePath, ZipArchive::CREATE) === TRUE) {
-            // Add file/folder to ZIP
-            $fileDownload->addFolderToZip($zip, $file, '');
-            $zip->close();
-
-            return response()->download($filePath, $zipFileName)->deleteFileAfterSend(true);
+        if ($file->type === 'folder') {
+            // Recursively copy subfolders and files
+            $fileMovingController->copyChildren($file->id, $newFile->id);
         } else {
-            return response()->json(['error' => 'Failed to create zip file'], 500);
+            Storage::copy($file->uploadName, $newFile->uploadName);
         }
+
+        return redirect('/showAllFile');
     }
 }

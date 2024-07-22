@@ -25,6 +25,15 @@
                                     </button>
                                 </div>
                             </form>
+                            <a href="#" id="deletedAllSelected"
+                                class="mr-3 nline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </a>
                             <!-- Settings Dropdown -->
                             <div class="hidden sm:flex sm:items-center sm:ms-1">
                                 <x-dropdown align="right" width="48">
@@ -111,21 +120,19 @@
                                 </div>
                             </div>
                             <!-- Error Messages -->
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    <div class="ml-2 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-                                        role="alert">
-                                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                        </svg>
-                                        <span class="sr-only">Info</span>
-                                        <div>
-                                            <span class="font-medium">Danger alert!</span> {{ $error }}
-                                        </div>
+                            @if (session()->has('error'))
+                                <div class="flex items-center p-4 ml-1 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+                                    role="alert">
+                                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                    </svg>
+                                    <span class="sr-only">Info</span>
+                                    <div>
+                                        <span class="font-medium">Danger alert!</span> {{ session()->get('error') }}
                                     </div>
-                                @endforeach
+                                </div>
                             @endif
                             @if (session()->has('message'))
                                 <div class="flex items-center p-4 ml-1 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
@@ -167,6 +174,14 @@
                                     <table class="w-full max-w-full divide-y divide-gray-200 dark:divide-gray-600">
                                         <thead class="bg-gray-50 dark:bg-gray-700">
                                             <tr>
+                                                <th scope="col" class="p-4">
+                                                    <div class="flex items-center">
+                                                        <input name="ids" id="checkbox_all"
+                                                            aria-describedby="checkbox-1" type="checkbox"
+                                                            class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                                                    </div>
+                                                </th>
                                                 <th scope="col"
                                                     class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                                     ID
@@ -192,6 +207,15 @@
                                         <tbody class="bg-white dark:bg-gray-800">
                                             @foreach ($files as $file)
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td class="w-4 p-4">
+                                                        <div class="flex items-center">
+                                                            <input id="checkbox_id" aria-describedby="checkbox-1"
+                                                                name="ids" type="checkbox"
+                                                                value="{{ $file->id }}"
+                                                                class="checkbox_item w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                                            <label for="" class="sr-only">checkbox</label>
+                                                        </div>
+                                                    </td>
                                                     <td
                                                         class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                                         {{ $file->id }}
@@ -216,6 +240,8 @@
                                                                 'xml',
                                                                 'html',
                                                             ];
+                                                            $pdfExtensions = ['pdf'];
+                                                            $specialExtensions = ['zip', 'rar'];
                                                             $fileExtension = $file->extension;
                                                         @endphp
                                                         @if ($file->type == 'file')
@@ -235,11 +261,32 @@
                                                                         d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7ZM8 16a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1-5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
                                                                         clip-rule="evenodd" />
                                                                 </svg>
+                                                            @elseif (in_array($fileExtension, $specialExtensions))
+                                                                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24" height="24" fill="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm3 2h2.01v2.01h-2V8h2v2.01h-2V12h2v2.01h-2V16h2v2.01h-2v2H12V18h2v-1.99h-2V14h2v-1.99h-2V10h2V8.01h-2V6h2V4Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            @elseif (in_array($fileExtension, $pdfExtensions))
+                                                                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24" height="24" fill="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2 2h12a2 2 0 0 0 2-2 2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V4a2 2 0 0 0-2-2h-7Zm-6 9a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h.5a2.5 2.5 0 0 0 0-5H5Zm1.5 3H6v-1h.5a.5.5 0 0 1 0 1Zm4.5-3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1.376A2.626 2.626 0 0 0 15 15.375v-1.75A2.626 2.626 0 0 0 12.375 11H11Zm1 5v-3h.375a.626.626 0 0 1 .625.626v1.748a.625.625 0 0 1-.626.626H12Zm5-5a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1h1a1 1 0 1 0 0-2h-2Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
                                                             @endif
-                                                            <a data-file-id={{ $file->id }}
-                                                                onclick="showFileModal(event, '{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
-                                                                {{ $file->name }}
-                                                            </a>
+                                                            @if (in_array($fileExtension, $imageExtensions))
+                                                                <a data-file-id={{ $file->id }}
+                                                                    onclick="showFileModal(event, '{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}', '{{ $fileExtension }}')">
+                                                                    {{ $file->name }}
+                                                                </a>
+                                                            @elseif (in_array($fileExtension, $pdfExtensions))
+                                                                <a
+                                                                    href="{{ Storage::disk('s3')->temporaryUrl($file->uploadName, now()->addMinutes(5)) }}">{{ $file->name }}</a>
+                                                            @endif
                                                         @else
                                                             <a href="{{ route('folder.show', $file->id) }}"
                                                                 class="flex items-center"><svg class="mr-2"
@@ -325,7 +372,7 @@
                                                                     <x-dropdown-link>
                                                                         <input type="text" class="hidden"
                                                                             id="copy_{{ $file->id }}"
-                                                                            value="fileShare/{{ $file->path }}">
+                                                                            value="{{ url('fileShare/' . $file->path) }}">
                                                                         <button value="copy"
                                                                             onclick="copyToClipboard('copy_{{ $file->id }}')">{{ __('Share file') }}</button>
                                                                     </x-dropdown-link>
@@ -391,7 +438,7 @@
             // Update the form's action attribute with the file download route
             downloadForm.action = `{{ url('/file/download/') }}/${fileId}`;
 
-            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'pdf'];
             const modal = document.getElementById('fileModal');
             const fileImage = document.getElementById('fileImage');
             const fileMessage = document.getElementById('fileMessage');
@@ -400,7 +447,6 @@
             if (imageExtensions.includes(fileExtension.toLowerCase())) {
                 fileImage.src = fileUrl;
                 fileImage.classList.remove('hidden');
-                fileMessage.textContent = '';
             } else {
                 fileImage.src = '';
                 fileImage.classList.add('hidden');
@@ -415,6 +461,52 @@
             const modal = document.getElementById('fileModal');
             modal.classList.add('hidden');
         }
+
+        document.getElementById('checkbox_all').addEventListener('click', function(event) {
+            let checkboxes = document.querySelectorAll('.checkbox_item');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = event.target.checked;
+            });
+        });
+
+        document.getElementById('deletedAllSelected').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            if (!confirm('Are you sure you want to delete the selected items?')) {
+                return;
+            }
+
+            let selectedIds = [];
+            let checkboxes = document.querySelectorAll('.checkbox_item:checked');
+
+            checkboxes.forEach(checkbox => {
+                selectedIds.push(checkbox.value);
+            });
+
+            if (selectedIds.length > 0) {
+                fetch('/delete-selected', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            ids: selectedIds
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert('An error occurred while deleting the items.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                alert('No items were selected.');
+            }
+        });
     </script>
     @include('layouts.partials.modal')
     @include('layouts.partials.fileImage_modal')

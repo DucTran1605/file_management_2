@@ -20,17 +20,20 @@ class FileDeleteController extends Controller
     {
         // Find the file/folder by its ID
         $file = File::findOrFail($id);
-
-        // Check if it is a folder
-        if ($file->type == 'folder') {
-            // Recursively delete the folder and all its contents
-            $file->deleteWithFileChildren();
+        if ($file->user_id != auth()->id()) {
+            return redirect()->back()->with('error', 'You do not own this file');
         } else {
-            // Just delete the file
-            $file->delete();
-        }
+            // Check if it is a folder
+            if ($file->type == 'folder') {
+                // Recursively delete the folder and all its contents
+                $file->deleteWithFileChildren();
+            } else {
+                // Just delete the file
+                $file->delete();
+            }
 
-        return redirect()->back()->with('message', 'Move file to the trash');
+            return redirect()->back()->with('message', 'Move file to the trash');
+        }
     }
 
     /**
@@ -82,5 +85,22 @@ class FileDeleteController extends Controller
             $activity->delete();
         }
         return redirect()->back()->with('message', 'Delete file success');
+    }
+
+    /**
+     * Deleted selected record
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function deleteSelected(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (!empty($ids)) {
+            File::whereIn('id', $ids)->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
     }
 }

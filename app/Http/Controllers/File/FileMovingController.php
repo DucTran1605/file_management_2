@@ -107,7 +107,7 @@ class FileMovingController extends Controller
      * @param mixed $newParentId
      * @return void
      */
-    protected function copyChildren($oldParentId, $newParentId)
+    public function copyChildren($oldParentId, $newParentId)
     {
         $children = File::where('parent_id', $oldParentId)->get();
 

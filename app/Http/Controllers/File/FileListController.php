@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\File;
 
 use App\Models\File;
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\SharedFile;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class FileListController extends Controller
 {
@@ -19,6 +22,7 @@ class FileListController extends Controller
             ['user_id', '=', auth()->id()],
             ['parent_id', '=', null]
         ])->paginate(15);
+
         return view('layouts.home.main_page', compact('files'));
     }
 
