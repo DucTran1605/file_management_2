@@ -16,6 +16,10 @@ use App\Http\Controllers\File\FileDownloadController;
 use App\Http\Controllers\Activity\ActivityListController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
+if(App::environment('production')){
+    URL::forceScheme('https');
+}
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
