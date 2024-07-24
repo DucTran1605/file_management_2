@@ -36,11 +36,17 @@ class ActivityListController extends Controller
         }
 
         // Count all entries with type 'file'
-        $filesCount = File::where('type', '=', 'file')
+        $filesCount = File::where([
+            ['user_id', '=', auth()->id()],
+            ['type', '=', 'file']
+        ])
             ->count();
 
         // Count all entries with type 'folder'
-        $foldersCount = File::where('type', '=', 'folder')
+        $foldersCount = File::where([
+            ['user_id', '=', auth()->id()],
+            ['type', '=', 'folder']
+        ])
             ->count();
 
         return view('layouts.home.activity', compact('activities', 'filesCount', 'foldersCount', 'memory'));
